@@ -7,12 +7,26 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.displayHeight = 50;
         this.displayWidth = 50;
 
-        this.play('enemyIdle');
+        this.play('enemyWalk');
 
         // Physics Properties
         this.setCollideWorldBounds(true);
         this.body.setSize(this.width, this.height, true);
         this.setGravityY(2000);
 
+    }
+
+    create(){
+
+    }
+
+    update(scene){
+        if(this.body.facing == 13){
+            this.setFlip(true, false);
+        }
+        if(this.body.facing == 14){
+            this.resetFlip();
+        }
+        //console.log(scene.body.FACING_LEFT);
     }
 }

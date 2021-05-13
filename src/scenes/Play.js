@@ -6,11 +6,11 @@ class Play extends Phaser.Scene{
     preload() {
         this.load.image('test_player', "./assets/test_player.png");
 
-        this.load.spritesheet('enemy1','./assets/enemySpriteSheet.png', {
+        this.load.spritesheet('enemy1','./assets/enemySprite.png', {
             frameWidth: 32,
             frameHeight: 32,
             startFrame: 0,
-            endFrame: 14,
+            endFrame: 18,
             repeat: -1
         });
     }
@@ -20,6 +20,8 @@ class Play extends Phaser.Scene{
         // Create Controls for Player
         this.cursors = this.input.keyboard.createCursorKeys();
         this.add.text(1, 0, "Play Scene");
+        this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
+        
 
         // Make Animations
         this.anims.create({
@@ -29,9 +31,9 @@ class Play extends Phaser.Scene{
             repeat: -1
         });
         this.anims.create({
-            key: 'enemyPunch',
-            frames: this.anims.generateFrameNumbers('enemy1', { frames: [ 6, 7, 8, 9, 10, 11, 12, 13] }),
-            frameRate: 10,
+            key: 'enemyWalk',
+            frames: this.anims.generateFrameNumbers('enemy1', { frames: [ 14, 15, 16, 17] }),
+            frameRate: 8,
             repeat: -1
         });
 
@@ -43,11 +45,15 @@ class Play extends Phaser.Scene{
     }
 
     goToEnemy(){
-        this.physics.accelerateToObject(this.enemy, this.player, 250, 120, 120);
+        this.physics.accelerateToObject(this.enemy, this.player, 600, 120, 120);
     }
 
     update() {
+
+        //Debug stuff
+        this.facing.setText('Enemy: ' + this.enemy.body.facing);
+
         this.player.update();
-        this.enemy.update();
+        this.enemy.update(this);
     }
 }
