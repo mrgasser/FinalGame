@@ -4,10 +4,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
+        this.displayHeight = 50;
+        this.displayWidth = 50;
+
         // Physics Properties
         this.setCollideWorldBounds(true);
         this.body.setSize(this.width, this.height, true);
         this.setGravityY(2000);
+
+        
 
         // Physics Variables
         this.ACCELERATION = 1000;
