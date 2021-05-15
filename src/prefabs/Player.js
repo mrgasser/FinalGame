@@ -49,24 +49,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     update(scene) {
 
         //Check keyboard input
-        if(this.cursors.left.isDown) {
-            this.body.velocity.x = -this.VELOCITY;
-            this.setFlip(true, false);
-        } else if(this.cursors.right.isDown) {
-            this.body.velocity.x = this.VELOCITY;
-            this.resetFlip();
-        } else {
-            // set acceleration to 0 so DRAG will take over
-            //this.play('test_player');
-            this.body.setAccelerationX(0);
-            this.body.setDragX(this.DRAG);
-            //this.anims.play('turn');
+        if(!this.state.isAttacking){
+            if(this.cursors.left.isDown && !this.cursors.right.isDown) {
+                this.body.velocity.x = -this.VELOCITY;
+                this.play('enemyWalk');
+                this.setFlip(true, false);
+            } else if(this.cursors.right.isDown && !this.cursors.left.isDown) {
+                this.body.velocity.x = this.VELOCITY;
+                this.play('enemyWalk');
+                this.resetFlip();
+            } else {
+                // set acceleration to 0 so DRAG will take over
+                //this.play('test_player');
+                this.body.setAccelerationX(0);
+                this.body.setDragX(this.DRAG);
+                this.anims.play('enemyIdle');
+            }
         }
-
         if(Phaser.Input.Keyboard.JustDown(keySPACE)){
             this.usePunch(scene);
         }
-
         if (this.state.isAttacking) {
             this.body.velocity.x = 0;
         }
@@ -79,19 +81,24 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if(!this.state.isAttacking){
                 
                 // checks which direction player is facing to spawn punch
-                if (this.body.facing == 14) {
-                    this.punch = scene.add.rectangle(this.x + 20, this.y, 50, 30, 0xffffff);
-                } else if (this.body.facing == 13) {
+                if (this.body.facing == 13) {
                     this.punch = scene.add.rectangle(this.x - 20, this.y, 50, 30, 0xffffff);
+                    scene.physics.add.existing(this.punch);
+                } else{
+                    this.punch = scene.add.rectangle(this.x + 20, this.y, 50, 30, 0xffffff);
+                    scene.physics.add.existing(this.punch);
+                    
                 }
+    
                 this.punch.setActive(true);
                 this.punch.setVisible(true);
                 this.state.isAttacking = true;
                 this.play('enemyPunch');
                 setTimeout( () => {
                     //this.punch.disableBody(true,true);
-                    this.punch.setActive(false);
-                    this.punch.setVisible(false);
+                    //this.punch.setActive(false);
+                    //this.punch.setVisible(false);
+                    this.punch.destroy();
                     this.state.isAttacking = false;
                 }, 200);
                 return resolve();

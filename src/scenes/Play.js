@@ -12,6 +12,13 @@ class Play extends Phaser.Scene{
             endFrame: 18,
             repeat: -1
         });
+        this.load.spritesheet('main_player','./assets/FinalCharacter.png', {
+            frameWidth: 32,
+            frameHeight: 32,
+            startFrame: 0,
+            endFrame: 19,
+            repeat: -1
+        });
 
     }
 
@@ -39,21 +46,20 @@ class Play extends Phaser.Scene{
         this.anims.create({
             key: 'enemyPunch',
             frames: this.anims.generateFrameNumbers('enemy1', {start: 6, end: 13}),
-            frameRate: 20,
+            frameRate: 30,
             repeat: -1
         });
-
         this.anims.create({
             key: 'playerIdle',
-            frames: this.anims.generateFrameNumbers('test_player', {frame: 0}),
-            frameRate: 20,
+            frames: this.anims.generateFrameNumbers('main_player', {frame: 0}),
+            frameRate: 10,
             //repeat: -1
         });
 
         this.hitboxes = this.physics.add.group();
         this.physics.world.enable(this.hitboxes);
 
-        this.player = new Player(this, game.config.width/3, game.config.height/2, 'test_player');
+        this.player = new Player(this, game.config.width/3, game.config.height, 'enemy1');
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'enemy1');
 
         this.time.addEvent({ delay: 500, callback: this.goToEnemy, callbackScope: this, loop: true});
