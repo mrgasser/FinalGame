@@ -12,8 +12,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setSize(this.width, this.height, true);
         this.setGravityY(2000);
 
-        
-
         // Physics Variables
         this.ACCELERATION = 1000;
         this.MAX_X_VEL = 100;
@@ -22,12 +20,32 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.JUMP_VELOCITY = -500;
         this.DRAG = 500;
 
+        // Set controls for Player
         this.cursors = scene.input.keyboard.createCursorKeys();
+        keySPACE = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // Set different states
+        this.state = {
+            isHit: false,
+            isKnocked: false,
+            isAttacking: false
+        }
+
+        this.setHitboxes(scene);
+        
+    }
+
+    setHitboxes(scene){
+        //this.setHitboxes(scene);
+        this.punch = scene.add.rectangle(200, 100, 50, 30, 0xffffff);
+        scene.add.existing(this.punch);
+        scene.physics.add.existing(this.punch);
+        this.punch.setActive(false);
+        this.punch.setVisible(false);
     }
 
     update(scene) {
 
-        //this.body.setVelocityX(100);
         //Check keyboard input
         if(this.cursors.left.isDown) {
             this.body.setAccelerationX(-this.ACCELERATION);
@@ -37,9 +55,35 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.resetFlip();
         } else {
             // set acceleration to 0 so DRAG will take over
+            //this.play('test_player');
             this.body.setAccelerationX(0);
             this.body.setDragX(this.DRAG);
+            //this.anims.play('turn');
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(keySPACE)){
+            this.usePunch();
         }
 
     }
+
+    usePunch(){
+
+        return new Promise( async (resolve, reject) => {
+            this.punch.setActive(true);
+            this.punch.setVisible(true);
+            // add if statements for looking left and right
+            this.punch.x = this.x + 20; this.punch.y = this.y;
+            this.state.isAttacking = true;
+            this.play('enemyPunch');
+            setTimeout( () => {
+                this.punch.setActive(false);
+                this.punch.setVisible(false);
+                this.state.isAttacking = false;
+            }, 200);
+            return resolve();
+        });
+
+    }
+
 }
