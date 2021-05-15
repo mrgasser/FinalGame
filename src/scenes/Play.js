@@ -71,7 +71,7 @@ class Play extends Phaser.Scene{
         this.facing.setText('Enemy: ' + this.enemy.body.facing);
         this.facingPlayer.setText('Player: ' + this.player.body.facing);
 
-        this.player.update();
+        this.player.update(this);
         this.enemy.update(this);
     }
 }
