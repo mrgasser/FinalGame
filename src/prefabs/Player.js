@@ -40,6 +40,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.punch = scene.add.rectangle(200, 100, 50, 30, 0xffffff);
         scene.add.existing(this.punch);
         scene.physics.add.existing(this.punch);
+        scene.hitboxes.add(this.punch);
         this.punch.setActive(false);
         this.punch.setVisible(false);
     }
@@ -68,20 +69,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     usePunch(){
-
+        
         return new Promise( async (resolve, reject) => {
-            this.punch.setActive(true);
-            this.punch.setVisible(true);
-            // add if statements for looking left and right
-            this.punch.x = this.x + 20; this.punch.y = this.y;
-            this.state.isAttacking = true;
-            this.play('enemyPunch');
-            setTimeout( () => {
-                this.punch.setActive(false);
-                this.punch.setVisible(false);
-                this.state.isAttacking = false;
-            }, 200);
-            return resolve();
+            if(!this.state.isAttacking){
+                this.punch.setActive(true);
+                this.punch.setVisible(true);
+                // add if statements for looking left and right
+                this.punch.x = this.x + 20; this.punch.y = this.y;
+                this.state.isAttacking = true;
+                this.play('enemyPunch');
+                setTimeout( () => {
+                    this.punch.disableBody(true,true);
+                    this.punch.setActive(false);
+                    this.punch.setVisible(false);
+                    this.state.isAttacking = false;
+                }, 200);
+                return resolve();
+            }
         });
 
     }

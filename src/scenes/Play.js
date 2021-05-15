@@ -50,10 +50,14 @@ class Play extends Phaser.Scene{
             //repeat: -1
         });
 
+        this.hitboxes = this.physics.add.group();
+        this.physics.world.enable(this.hitboxes);
+
         this.player = new Player(this, game.config.width/3, game.config.height/2, 'test_player');
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'enemy1');
 
         this.time.addEvent({ delay: 500, callback: this.goToEnemy, callbackScope: this, loop: true});
+        //this.physics.add.overlap(this.hitboxes, this.enemy);
         
     }
 
