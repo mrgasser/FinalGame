@@ -1,3 +1,6 @@
+// Punch Sound effect
+// https://mixkit.co/free-sound-effects/punch/
+
 // Game configuration
 let config = {
     type: Phaser.CANVAS,
