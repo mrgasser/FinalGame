@@ -100,6 +100,7 @@ class Play extends Phaser.Scene{
         this.player.update(this);
         this.enemy.update(this);
 
+        // go to menu scene
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             this.sound.play('sfx_select_2');
             this.scene.start('menuScene');

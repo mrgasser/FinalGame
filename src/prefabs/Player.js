@@ -38,7 +38,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     update(scene) {
 
-        //Check keyboard input
+        //Check keyboard input for movement
         if(!this.state.isAttacking){
             if(this.cursors.left.isDown && !this.cursors.right.isDown) {
                 this.body.velocity.x = -this.VELOCITY;
@@ -71,10 +71,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         return new Promise( async (resolve, reject) => {
             //Check if theyre not already attacking so they cant spam
             if(!this.state.isAttacking){
-                // checks which direction player is facing to spawn punch
                 this.state.isAttacking = true;
                 this.play('enemyPunch');
                 setTimeout( () => {
+                    // checks which direction player is facing to spawn punch
                     if (this.body.facing == 13) {
                         this.punch = scene.add.rectangle(this.x - 20, this.y, 50, 30, 0xffffff).setAlpha(0);
                         scene.physics.add.existing(this.punch);
