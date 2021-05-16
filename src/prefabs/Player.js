@@ -86,6 +86,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     }
                     //this.punch.setActive(true);
                     //this.punch.setVisible(true);
+                    scene.sound.play('sfx_punch');
                     
                 }, 200);
                 setTimeout( () => {

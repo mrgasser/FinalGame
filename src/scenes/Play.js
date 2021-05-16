@@ -24,14 +24,18 @@ class Play extends Phaser.Scene{
 
     create() {
         
-        // Create Controls for Player
+        // Text for scene
         //this.cursors = this.input.keyboard.createCursorKeys();
         this.add.text(1, 0, "Play Scene");
         this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
         this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
         this.playerState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
-        this.punched = this.add.text(game.config.width/2, game.config.height/2, 'Arrow keys to move, Space to punch', { font: '16px Courier', fill: '#ffffff', align: 'center' });
+        this.punched = this.add.text(game.config.width/2, game.config.height/2, 'Arrow keys to move, Space to punch', { font: '16px Courier', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
         
+        // Return to menu configuration
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        this.add.text(game.config.width/2, 20, "Press R to return to Menu").setOrigin(0.5);
+
         // Make Animations
         this.anims.create({
             key: 'enemyIdle',
@@ -67,16 +71,18 @@ class Play extends Phaser.Scene{
         this.time.addEvent({ delay: 500, callback: this.goToEnemy, callbackScope: this, loop: true});
         this.physics.add.overlap(this.hitboxes, this.enemy, this.doSomething, null);
         //this.player.once('punch', this.doSomething)
-        
+
     }
 
     doSomething(){
         //this.punched.setText("PUNCH CONNECTED");
         console.log("punched");
+        
         //this.playerState.setText(this.player.currState());
     }
 
     goToEnemy(){
+        // Enemy follows player
         this.physics.accelerateToObject(this.enemy, this.player, 600, 120, 120);
     }
 
@@ -93,5 +99,11 @@ class Play extends Phaser.Scene{
 
         this.player.update(this);
         this.enemy.update(this);
+
+        if (Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.sound.play('sfx_select_2');
+            this.scene.start('menuScene');
+        }
+
     }
 }
