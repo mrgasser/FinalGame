@@ -29,6 +29,7 @@ class Play extends Phaser.Scene{
         this.add.text(1, 0, "Play Scene");
         this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
         this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
+        this.playerState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
         
         // Make Animations
         this.anims.create({
@@ -46,7 +47,7 @@ class Play extends Phaser.Scene{
         this.anims.create({
             key: 'enemyPunch',
             frames: this.anims.generateFrameNumbers('enemy1', {start: 6, end: 13}),
-            frameRate: 30,
+            frameRate: 25,
             repeat: -1
         });
         this.anims.create({
@@ -74,8 +75,13 @@ class Play extends Phaser.Scene{
     update() {
 
         //Debug stuff
-        this.facing.setText('Enemy: ' + this.enemy.body.facing);
-        this.facingPlayer.setText('Player: ' + this.player.body.facing);
+        {
+            this.playerState.x = this.player.x - 45;
+            this.playerState.y = this.player.y - 50;
+            this.facing.setText('Enemy: ' + this.enemy.body.facing);
+            this.facingPlayer.setText('Player: ' + this.player.body.facing);
+            this.playerState.setText(this.player.currState());
+        }
 
         this.player.update(this);
         this.enemy.update(this);
