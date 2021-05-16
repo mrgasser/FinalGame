@@ -31,8 +31,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             isMoving: false,
             isKnocked: false,
             isAttacking: false,
-
-            //currState: this.findState(this.state)
         }
 
         
@@ -80,12 +78,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     if (this.body.facing == 13) {
                         this.punch = scene.add.rectangle(this.x - 20, this.y, 50, 30, 0xffffff).setAlpha(0);
                         scene.physics.add.existing(this.punch);
+                        scene.hitboxes.add(this.punch);
                     } else{
                         this.punch = scene.add.rectangle(this.x + 20, this.y, 50, 30, 0xffffff).setAlpha(0);
                         scene.physics.add.existing(this.punch);
+                        scene.hitboxes.add(this.punch);
                     }
-                    this.punch.setActive(true);
-                    this.punch.setVisible(true);
+                    //this.punch.setActive(true);
+                    //this.punch.setVisible(true);
                     
                 }, 200);
                 setTimeout( () => {

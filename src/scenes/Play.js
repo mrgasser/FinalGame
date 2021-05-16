@@ -30,6 +30,7 @@ class Play extends Phaser.Scene{
         this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
         this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
         this.playerState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
+        this.punched = this.add.text(game.config.width/2, game.config.height/2, 'Arrow keys to move, Space to punch', { font: '16px Courier', fill: '#ffffff', align: 'center' });
         
         // Make Animations
         this.anims.create({
@@ -64,8 +65,15 @@ class Play extends Phaser.Scene{
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'enemy1');
 
         this.time.addEvent({ delay: 500, callback: this.goToEnemy, callbackScope: this, loop: true});
-        //this.physics.add.overlap(this.hitboxes, this.enemy);
+        this.physics.add.overlap(this.hitboxes, this.enemy, this.doSomething, null);
+        //this.player.once('punch', this.doSomething)
         
+    }
+
+    doSomething(){
+        //this.punched.setText("PUNCH CONNECTED");
+        console.log("punched");
+        //this.playerState.setText(this.player.currState());
     }
 
     goToEnemy(){
