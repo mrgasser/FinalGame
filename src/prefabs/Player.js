@@ -4,8 +4,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        this.displayHeight = 50;
-        this.displayWidth = 50;
+        this.displayHeight = 150;
+        this.displayWidth = 150;
 
         // Physics Properties
         this.setCollideWorldBounds(true);
@@ -33,6 +33,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             isAttacking: false,
         }
 
+        // Set Anims
+        scene.anims.create({
+            key: 'playerIdle',
+            frames: this.anims.generateFrameNumbers('main_player', {start: 0, end: 7}),
+            frameRate: 15,
+            //repeat: -1
+        });
+        scene.anims.create({
+            key: 'playerWalk',
+            frames: this.anims.generateFrameNumbers('main_player', {start: 8, end: 11}),
+            frameRate: 8,
+            //repeat: -1
+        });
+        scene.anims.create({
+            key: 'playerPunch',
+            frames: this.anims.generateFrameNumbers('main_player', {start: 12, end: 15}),
+            frameRate: 15,
+            //repeat: -1
+        });
+
         
     }
 
@@ -43,18 +63,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             if(this.cursors.left.isDown && !this.cursors.right.isDown) {
                 this.body.velocity.x = -this.VELOCITY;
                 this.state.isMoving = true;
-                this.play('enemyWalk');
+                this.play('playerWalk', true);
+                //this.body.setSize(this.width, this.height, true);
                 this.setFlip(true, false);
             } else if(this.cursors.right.isDown && !this.cursors.left.isDown) {
                 this.body.velocity.x = this.VELOCITY;
                 this.state.isMoving = true;
-                this.play('enemyWalk');
+                this.play('playerWalk', true);
                 this.resetFlip();
             } else {
                 this.state.isMoving = false;
                 this.body.setAccelerationX(0);
                 this.body.setDragX(this.DRAG);
-                this.anims.play('enemyIdle');
+                this.anims.play('playerIdle', true);
             }
         }
         if(Phaser.Input.Keyboard.JustDown(keySPACE)){
@@ -72,15 +93,15 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             //Check if theyre not already attacking so they cant spam
             if(!this.state.isAttacking){
                 this.state.isAttacking = true;
-                this.play('enemyPunch');
+                this.play('playerPunch');
                 setTimeout( () => {
                     // checks which direction player is facing to spawn punch
                     if (this.body.facing == 13) {
-                        this.punch = scene.add.rectangle(this.x - 20, this.y, 50, 30, 0xffffff).setAlpha(0);
+                        this.punch = scene.add.rectangle(this.x - 40, this.y, 80, 40, 0xffffff).setAlpha(0);
                         scene.physics.add.existing(this.punch);
                         scene.hitboxes.add(this.punch);
                     } else{
-                        this.punch = scene.add.rectangle(this.x + 20, this.y, 50, 30, 0xffffff).setAlpha(0);
+                        this.punch = scene.add.rectangle(this.x + 40, this.y, 80, 40, 0xffffff).setAlpha(0);
                         scene.physics.add.existing(this.punch);
                         scene.hitboxes.add(this.punch);
                     }

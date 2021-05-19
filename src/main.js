@@ -6,7 +6,7 @@ let config = {
     type: Phaser.CANVAS,
     width: 640,
     height: 480,
-
+    pixelArt: true,
     physics: {
         default: 'arcade',
         arcade: {
@@ -18,7 +18,7 @@ let config = {
         }
     },
     autoCenter: true,
-    pixelArt: true,
+    
     scene: [Menu, Play]
 }
 
