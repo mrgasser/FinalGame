@@ -68,6 +68,23 @@ class Play extends Phaser.Scene{
 
         this.player = new Player(this, game.config.width/3, game.config.height, 'main_player');
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'enemy1');
+
+        // StateMachine.factory(Enemy, {
+        //     init: 'idle',
+        //     transitions: [
+        //       { name: 'punched',  from: 'idle',  to: 'stunned' },
+        //       { name: 'stunTimerFinished',  from: 'stunned',  to: 'idle' }
+        //     ],
+        //     methods: {
+        //         onIdle: function() { this.play('enemyIdle') },
+        //         //onPunched: function() { console.log('Got Punched')},
+        //         onStunned: function() { console.log('Im Stunned')},
+        //         //onRecover: function() { console.log('Im Recovering')}
+        //     }
+        // });
+    
+        //this.farRange = this.add.ellipse(this.player.x, this.player.y, 50, 50, 0xffffff, 0);
+        //this.physics.add.existing(this.farRange);
     }
 
 
@@ -86,6 +103,11 @@ class Play extends Phaser.Scene{
             this.playerState.setText(this.player.currState());
             this.enemyState.setText(this.enemy.currState());
         }
+
+        // make circle follow player
+        //this.farRange.x = this.player.x + 150;
+        //this.farRange.y = this.player.y;
+
 
         this.player.update(this);
         this.enemy.update(this, this.player);

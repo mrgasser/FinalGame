@@ -7,28 +7,67 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.displayHeight = 150;
         this.displayWidth = 150;
 
-        
+        // Save Passed Over Variables
+        this.scene = scene;
 
         // Physics Properties
         this.setCollideWorldBounds(true);
         this.body.setSize(this.width, this.height, true);
         this.setGravityY(2000);
 
-        this.play('enemyWalk');
-
-        // Set different states
-        this.state = {
-            isStunned: false,
-            isStunned2: false,
-            isStunned3: false,
-            isMoving: false,
-            isKnocked: false,
-            isAttacking: false,
+        // CREATE THE STATEMACHINE
+        this.fsm = {
+            scope: this
         }
-
+        StateMachine.apply(this.fsm, {
+            init: 'idle',
+            transitions: [
+              { name: 'punched',  from: 'idle',  to: 'stunned' },
+              { name: 'stunTimerFinished',  from: 'stunned',  to: 'idle' }
+            ],
+            methods: {
+                onIdle: this._onIdle,
+                onStunned: this._onStunned
+            }
+          });
+          
+        // Initialize the FSM
+        // this.fsm = new StateMachine({
+        //     init: 'idle',
+        //     transitions: [
+        //       { name: 'punched',  from: 'idle',  to: 'stunned' },
+        //       { name: 'stunTimerFinished',  from: 'stunned',  to: 'idle' }
+        //     ],
+        //     methods: {
+        //         onEnterIdle: function() { console.log(this)},
+        //         //onPunched: function() { console.log('Got Punched')},
+        //         onStunned: function() { console.log('Im Stunned')}
+        //         //onRecover: function() { console.log('Im Recovering')}
+        //     }
+        // });
         //collisions
-        scene.physics.add.overlap(scene.hitboxes, this, this.enemyStun, null);
+        this.scene.timerLabel = this.scene.add.text(0, 60, 'HELLO', { font: '16px Courier', fill: '#00ff00' });
+        
+        this.stunCountdown = new CountdownController(scene, scene.timerLabel, 1500);
+        
+        scene.physics.add.overlap(scene.hitboxes, this, this.enemyStun.bind(this), null);
+        console.log(this.stunCountdown);
+    }
 
+    _onIdle(){
+        console.log("onIdle");
+        this.scope.play('enemyIdle');
+    }
+
+    _onStunned(){
+        console.log("onStunned");
+        this.scope.body.stop();
+        this.scope.stop();
+    }
+
+    handleFinishedStun(){
+        console.log("finishedStun");
+        this.fsm.stunTimerFinished();
     }
 
     update(scene, player){
@@ -39,37 +78,26 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.resetFlip();
         }
 
-        if(this.state.isStunned){
-            this.body.stop();
-        }
-
-        if(!this.state.isStunned){
-            this.state.isMoving = true;
-            scene.physics.accelerateToObject(this, player, 600, 120, 2000);
-        }
+        this.stunCountdown.update();
     }
 
-
-    enemyStun(obj1){
-
+    enemyStun(){
+        
         return new Promise( async (resolve, reject) => {
 
-            if(!obj1.hasOverlapped){
-                obj1.state.isMoving = false;
-                obj1.state.isStunned = true;
-                obj1.hasOverlapped = true;
+            if(!this.hasOverlapped){
+                this.stunCountdown.start(this.handleFinishedStun.bind(this));
+
+                if(!this.fsm.is('stunned')){
+                    this.fsm.punched();
+                }
+
+                this.hasOverlapped = true;
 
                 setTimeout( () => {
-                    obj1.hasOverlapped = false;
+                    this.hasOverlapped = false;
                 }, 300);
 
-                // if(obj1.hasOverlapped){
-                //     console.log("wassup");
-                // }
-
-                setTimeout( () => {
-                    obj1.state.isStunned = false;
-                }, 1000);
             }
 
             return resolve();
@@ -77,19 +105,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         
     }
 
+    keepDistance(scene, player){
+        if(this.x < player.body.x + 50){
+            this.state.isMoving = true;
+            scene.physics.accelerateToObject(this, scene.farRange, 1000, 120, 2000);
+            
+        }
+    }
+
     currState(){
-        if(this.state.isStunned){
-            return "IsStunned";
-        }
-        else if(this.state.isAttacking){
-            return "IsAttacking";
-        }
-        else if(this.state.isMoving){
-            return "IsMoving"
-        }
-        else{
-            return "Idle";
-        }
-        
+        return "is-" + this.fsm.state;
     }
 }
