@@ -1,5 +1,5 @@
 class CountdownController extends Phaser.Time.TimerEvent {
-    constructor(scene, label, duration){
+    constructor(scene, label = null, duration){
         super(scene, label, duration);
 
         // Set Variables
@@ -12,14 +12,26 @@ class CountdownController extends Phaser.Time.TimerEvent {
 
         if(this.timerEvent){ this.timerEvent.reset() }
         this.stop();
+        // if(scope != undefined){
+        //     this.scope = scope
+        // }
         //this.finishedCallback = callback;
 
         this.timerEvent = this.scene.time.addEvent({
             delay: this.duration,
             callback: () => {
-                this.label.text = '0';
+                if(this.label != null){
+                    this.label.text = '0';
+                }
                 this.stop();
-                if(callback){callback();}
+                if(callback){
+                    // if(scope != undefined){
+                    //     callback().bind(this.scope);
+                    // }
+                    //else{
+                    callback();
+                    //}
+                }
             }
         })
     }
@@ -32,7 +44,10 @@ class CountdownController extends Phaser.Time.TimerEvent {
         const elapsed = this.timerEvent.getElapsed();
         const remaining = this.duration - elapsed;
         const seconds = remaining / 1000;
-        this.label.text = seconds.toFixed(2);
+
+        if(this.label != null){
+            this.label.text = seconds.toFixed(2);
+        }
     }
 
     stop(){

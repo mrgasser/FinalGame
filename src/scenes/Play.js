@@ -5,8 +5,8 @@ class Play extends Phaser.Scene{
 
     preload() {
         this.load.spritesheet('main_player', "./assets/Main_Character/mainPlayer.png", {
-            frameWidth: 50,
-            frameHeight: 50,
+            frameWidth: 46,
+            frameHeight: 47,
             startFrame: 0,
             endFrame: 15,
             repeat: -1
@@ -29,7 +29,12 @@ class Play extends Phaser.Scene{
     }
 
     create() {
-        
+
+        this.gameFloor = this.add.rectangle(0, game.config.height - 10, game.config.width, 50, 0xf0df0f).setOrigin(0);
+        this.physics.world.enable(this.gameFloor);
+        this.gameFloor.body.setImmovable();
+        //this.gameFloor.body.setFrictionX(100);
+
         // Text for scene
         //this.cursors = this.input.keyboard.createCursorKeys();
         this.add.text(1, 0, "Play Scene");
@@ -66,25 +71,12 @@ class Play extends Phaser.Scene{
         this.hitboxes = this.physics.add.group();
         this.physics.world.enable(this.hitboxes);
 
-        this.player = new Player(this, game.config.width/3, game.config.height, 'main_player');
+        this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'enemy1');
 
-        // StateMachine.factory(Enemy, {
-        //     init: 'idle',
-        //     transitions: [
-        //       { name: 'punched',  from: 'idle',  to: 'stunned' },
-        //       { name: 'stunTimerFinished',  from: 'stunned',  to: 'idle' }
-        //     ],
-        //     methods: {
-        //         onIdle: function() { this.play('enemyIdle') },
-        //         //onPunched: function() { console.log('Got Punched')},
-        //         onStunned: function() { console.log('Im Stunned')},
-        //         //onRecover: function() { console.log('Im Recovering')}
-        //     }
-        // });
-    
-        //this.farRange = this.add.ellipse(this.player.x, this.player.y, 50, 50, 0xffffff, 0);
-        //this.physics.add.existing(this.farRange);
+        // Physics Collisions
+        this.physics.add.collider(this.enemy, this.gameFloor);
+        this.physics.add.collider(this.player, this.gameFloor);
     }
 
 
