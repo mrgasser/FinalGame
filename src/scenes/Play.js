@@ -117,10 +117,10 @@ class Play extends Phaser.Scene{
 
         //Debug stuff
         {
-            this.playerState.x = this.player.x - (this.player.width/2);
-            this.playerState.y = this.player.y - (this.player.height *2);
-            this.enemyState.x = this.enemy.x - (this.enemy.width);
-            this.enemyState.y = this.enemy.y - (this.enemy.height * 3);
+            this.playerState.x = this.player.body.x;
+            this.playerState.y = this.player.body.y - 20;
+            this.enemyState.x = this.enemy.body.x;
+            this.enemyState.y = this.enemy.body.y - 20;
 
             this.facing.setText('Enemy: ' + this.enemy.body.facing);
             this.facingPlayer.setText('Player: ' + this.player.body.facing);
