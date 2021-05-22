@@ -6,7 +6,7 @@ class Play extends Phaser.Scene{
     preload() {
         this.load.spritesheet('the_receptionist', "./assets/Enemies/receptionist.png", {
             frameWidth: 64,
-            frameHeight: 64,
+            frameHeight: 55,
             startFrame: 0,
             endFrame: 18,
             repeat: -1
@@ -102,8 +102,9 @@ class Play extends Phaser.Scene{
         this.hitboxes = this.physics.add.group();
         this.physics.world.enable(this.hitboxes);
 
-        this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
+        this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
+        
 
         // Physics Collisions
         this.physics.add.collider(this.enemy, this.gameFloor);

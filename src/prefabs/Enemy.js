@@ -5,7 +5,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
 
         this.displayHeight = 150;
-        this.displayWidth = 150;
+        this.displayWidth = 170;
 
         // Physics Properties
         this.setCollideWorldBounds(true);
