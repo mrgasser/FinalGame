@@ -4,13 +4,22 @@ class Play extends Phaser.Scene{
     }
 
     preload() {
+        this.load.spritesheet('the_receptionist', "./assets/Enemies/receptionist.png", {
+            frameWidth: 64,
+            frameHeight: 64,
+            startFrame: 0,
+            endFrame: 18,
+            repeat: -1
+        });
+
         this.load.spritesheet('main_player', "./assets/Main_Character/mainPlayer.png", {
             frameWidth: 46,
-            frameHeight: 47,
+            frameHeight: 46,
             startFrame: 0,
             endFrame: 15,
             repeat: -1
         });
+
         this.load.spritesheet('enemy1','./assets/enemySprite.png', {
             frameWidth: 32,
             frameHeight: 32,
@@ -50,29 +59,51 @@ class Play extends Phaser.Scene{
 
         // Make Animations
         this.anims.create({
-            key: 'enemyIdle',
-            frames: this.anims.generateFrameNumbers('enemy1', {start: 0, end: 5}),
+            key: 'recepIdle',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 0, end: 7}),
             frameRate: 10,
             repeat: -1
         });
+
         this.anims.create({
-            key: 'enemyWalk',
-            frames: this.anims.generateFrameNumbers('enemy1', {start: 14, end: 17}),
-            frameRate: 8,
+            key: 'recepStun',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 8, end: 11}),
+            frameRate: 15,
             repeat: -1
         });
+
         this.anims.create({
-            key: 'enemyPunch',
-            frames: this.anims.generateFrameNumbers('enemy1', {start: 6, end: 13}),
-            frameRate: 25,
-            repeat: -1
+            key: 'recepKnocked',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 12, end: 13}),
+            frameRate: 2,
+            //repeat: -1
         });
+
+        this.anims.create({
+            key: 'recepLaydown',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 18}),
+            //frameRate: 10,
+            //repeat: -1
+        });
+
+        // this.anims.create({
+        //     key: 'recepWalk',
+        //     frames: this.anims.generateFrameNumbers('the_receptionist', {start: 14, end: 17}),
+        //     frameRate: 8,
+        //     repeat: -1
+        // });
+        // this.anims.create({
+        //     key: 'recepPunch',
+        //     frames: this.anims.generateFrameNumbers('the_receptionist', {start: 6, end: 13}),
+        //     frameRate: 25,
+        //     repeat: -1
+        // });
 
         this.hitboxes = this.physics.add.group();
         this.physics.world.enable(this.hitboxes);
 
         this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
-        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'enemy1');
+        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
 
         // Physics Collisions
         this.physics.add.collider(this.enemy, this.gameFloor);

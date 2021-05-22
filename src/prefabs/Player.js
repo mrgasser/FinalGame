@@ -3,13 +3,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);
         scene.physics.add.existing(this);
-
+        
         this.displayHeight = 150;
         this.displayWidth = 150;
 
         // Physics Properties
         this.setCollideWorldBounds(true);
-        this.body.setSize(this.width, this.height, true);
+        this.body.setSize(25, this.height, true);
         this.setGravityY(2000);
 
         // Physics Variables
@@ -97,11 +97,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 setTimeout( () => {
                     // checks which direction player is facing to spawn punch
                     if (this.body.facing == 13) {
-                        this.punch = scene.add.rectangle(this.x - 40, this.y, 80, 40, 0xffffff).setAlpha(0);
+                        this.punch = scene.add.rectangle(this.x - 40, this.y, 100, 40, 0xffffff).setAlpha(0);
                         scene.physics.add.existing(this.punch);
                         scene.hitboxes.add(this.punch);
                     } else{
-                        this.punch = scene.add.rectangle(this.x + 40, this.y, 80, 40, 0xffffff).setAlpha(0);
+                        this.punch = scene.add.rectangle(this.x + 40, this.y, 100, 40, 0xffffff).setAlpha(0);
                         scene.physics.add.existing(this.punch);
                         scene.hitboxes.add(this.punch);
                     }
