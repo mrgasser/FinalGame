@@ -5,19 +5,17 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
 
         this.displayHeight = 150;
-        this.displayWidth = 150;
-
-        // Save Passed Over Variables
-        this.scene = scene;
-
-        // Enemys own variables
-        this.health = 100;
-        this.playerLooking = 0;
+        this.displayWidth = 170;
 
         // Physics Properties
         this.setCollideWorldBounds(true);
-        this.body.setSize(this.width, this.height, true);
+        this.body.setSize(25, this.height, true);
         this.setGravityY(2000);
+
+        // Enemys own variables
+        this.scene = scene;
+        this.health = 100;
+        this.playerLooking = "";
         
 
         // CREATE THE STATEMACHINE
@@ -36,8 +34,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
               { name: 'knockTimerFinished',  from: 'knocked',  to: 'layingDown' },
               { name: 'layTimerFinished',  from: 'layingDown',  to: 'idle' },
               { name: 'healthBelowZero',  from: 'layingDown',  to: 'die' },
-              
-              
+              { name: 'goto', from: '*', to: function(s) { return s } }
             ],
             methods: {
                 onIdle: this._onIdle,
@@ -49,40 +46,50 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         
         //Cooldown countdown
         //this.scene.timerLabel = this.scene.add.text(0, 60, 'HELLO', { font: '16px Courier', fill: '#00ff00' });
-        this.stunCountdown = new CountdownController(scene, null, 1500);
-        this.knockCountdown = new CountdownController(scene, null, 800);
+        this.stunCountdown = new CountdownController(scene, null, 1000);
+        this.knockCountdown = new CountdownController(scene, null, 900);
         this.laydownCountdown = new CountdownController(scene, null, 2000);
         
         //collisions
         scene.physics.add.overlap(scene.hitboxes, this, this.enemyStun.bind(this), null);
+        scene.physics.add.overlap(scene.knockHitboxes, this, () => {
+            if(!this.fsm.is('layingDown')){
+                this.fsm.goto('knocked');
+            }
+        }, null);
     }
 
     _onIdle(){
         console.log("onIdle");
-        this.scope.play('enemyIdle');
+        this.scope.play('recepIdle');
     }
 
     _onStunned(){
         console.log("onStunned");
         this.scope.body.stop();
         this.scope.stop();
+
+        this.scope.play('recepStun', true);
     }
 
     _onEnterKnocked(){
-        if(this.scope.playerLooking == 14){
+        if(this.scope.playerLooking == 'right'){
             this.scope.setBounce(0.8,0.8);
             this.scope.body.velocity.x = 300;
             this.scope.body.velocity.y = 800;
         }
         else{
+            console.log(this.scope.playerLooking);
             this.scope.setBounce(0.8,0.8);
             this.scope.body.velocity.x = -300;
             this.scope.body.velocity.y = 800;
         }
+        this.scope.play('recepKnocked', true);
         this.scope.knockCountdown.start(this.scope.handleFinishedKnocked.bind(this));
     }
 
     _onLayingDown(){
+        this.scope.play('recepLaydown', true);
         this.scope.laydownCountdown.start(this.scope.handleFinishedLayingDown.bind(this));
     }
 
@@ -116,7 +123,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.resetFlip();
         }
 
-        this.playerLooking = player.body.facing;
+        this.playerLooking = player.looking;
     }
 
     enemyStun(){
@@ -129,19 +136,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
                 if(this.fsm.can('knockedPunch')){
                     this.fsm.knockedPunch();
                 }
-
-                if(this.fsm.can('punched2')){
+                else if(this.fsm.can('punched2')){
                     this.fsm.punched2();
                 }
-
                 else if(this.fsm.can('punched3')){
                     this.fsm.punched3();
                 }
-                
                 else if(this.fsm.can('punched')){
                     this.fsm.punched();
                 }
-
                 this.hasOverlapped = true;
 
                 setTimeout( () => {

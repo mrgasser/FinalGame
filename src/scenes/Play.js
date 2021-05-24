@@ -4,13 +4,22 @@ class Play extends Phaser.Scene{
     }
 
     preload() {
+        this.load.spritesheet('the_receptionist', "./assets/Enemies/receptionist.png", {
+            frameWidth: 64,
+            frameHeight: 55,
+            startFrame: 0,
+            endFrame: 18,
+            repeat: -1
+        });
+
         this.load.spritesheet('main_player', "./assets/Main_Character/mainPlayer.png", {
             frameWidth: 46,
-            frameHeight: 47,
+            frameHeight: 46,
             startFrame: 0,
             endFrame: 15,
             repeat: -1
         });
+
         this.load.spritesheet('enemy1','./assets/enemySprite.png', {
             frameWidth: 32,
             frameHeight: 32,
@@ -42,7 +51,7 @@ class Play extends Phaser.Scene{
         this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
         this.playerState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
         this.enemyState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
-        this.punched = this.add.text(game.config.width/2, game.config.height/2, 'Arrow keys to move, Space to punch', { font: '16px Courier', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
+        this.punched = this.add.text(game.config.width/2, game.config.height/2, 'Arrow keys to move \n Space to punch \n Hold Space for powerful punch', { font: '16px Courier', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
         
         // Return to menu configuration
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -50,29 +59,55 @@ class Play extends Phaser.Scene{
 
         // Make Animations
         this.anims.create({
-            key: 'enemyIdle',
-            frames: this.anims.generateFrameNumbers('enemy1', {start: 0, end: 5}),
-            frameRate: 10,
+            key: 'recepIdle',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 0, end: 7}),
+            frameRate: 15,
             repeat: -1
         });
+
         this.anims.create({
-            key: 'enemyWalk',
-            frames: this.anims.generateFrameNumbers('enemy1', {start: 14, end: 17}),
-            frameRate: 8,
+            key: 'recepStun',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 8, end: 11}),
+            frameRate: 15,
             repeat: -1
         });
+
         this.anims.create({
-            key: 'enemyPunch',
-            frames: this.anims.generateFrameNumbers('enemy1', {start: 6, end: 13}),
-            frameRate: 25,
-            repeat: -1
+            key: 'recepKnocked',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 12, end: 13}),
+            frameRate: 2,
+            //repeat: -1
         });
+
+        this.anims.create({
+            key: 'recepLaydown',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 18}),
+            //frameRate: 10,
+            //repeat: -1
+        });
+
+        // this.anims.create({
+        //     key: 'recepWalk',
+        //     frames: this.anims.generateFrameNumbers('the_receptionist', {start: 14, end: 17}),
+        //     frameRate: 8,
+        //     repeat: -1
+        // });
+        // this.anims.create({
+        //     key: 'recepPunch',
+        //     frames: this.anims.generateFrameNumbers('the_receptionist', {start: 6, end: 13}),
+        //     frameRate: 25,
+        //     repeat: -1
+        // });
 
         this.hitboxes = this.physics.add.group();
         this.physics.world.enable(this.hitboxes);
 
+        this.knockHitboxes = this.physics.add.group();
+        this.physics.world.enable(this.knockHitboxes);
+
+        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
-        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'enemy1');
+        
 
         // Physics Collisions
         this.physics.add.collider(this.enemy, this.gameFloor);
@@ -85,10 +120,10 @@ class Play extends Phaser.Scene{
 
         //Debug stuff
         {
-            this.playerState.x = this.player.x - (this.player.width/2);
-            this.playerState.y = this.player.y - (this.player.height *2);
-            this.enemyState.x = this.enemy.x - (this.enemy.width);
-            this.enemyState.y = this.enemy.y - (this.enemy.height * 3);
+            this.playerState.x = this.player.body.x;
+            this.playerState.y = this.player.body.y - 20;
+            this.enemyState.x = this.enemy.body.x;
+            this.enemyState.y = this.enemy.body.y - 20;
 
             this.facing.setText('Enemy: ' + this.enemy.body.facing);
             this.facingPlayer.setText('Player: ' + this.player.body.facing);
