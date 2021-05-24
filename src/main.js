@@ -4,7 +4,7 @@
 // Game configuration
 let config = {
     type: Phaser.CANVAS,
-    width: 640,
+    width: 840,
     height: 480,
     pixelArt: true,
     physics: {

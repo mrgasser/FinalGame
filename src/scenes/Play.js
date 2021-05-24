@@ -51,7 +51,7 @@ class Play extends Phaser.Scene{
         this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
         this.playerState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
         this.enemyState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
-        this.punched = this.add.text(game.config.width/2, game.config.height/2, 'Arrow keys to move, Space to punch', { font: '16px Courier', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
+        this.punched = this.add.text(game.config.width/2, game.config.height/2, 'Arrow keys to move \n Space to punch \n Hold Space for powerful punch', { font: '16px Courier', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
         
         // Return to menu configuration
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
@@ -61,7 +61,7 @@ class Play extends Phaser.Scene{
         this.anims.create({
             key: 'recepIdle',
             frames: this.anims.generateFrameNumbers('the_receptionist', {start: 0, end: 7}),
-            frameRate: 10,
+            frameRate: 15,
             repeat: -1
         });
 
@@ -101,6 +101,9 @@ class Play extends Phaser.Scene{
 
         this.hitboxes = this.physics.add.group();
         this.physics.world.enable(this.hitboxes);
+
+        this.knockHitboxes = this.physics.add.group();
+        this.physics.world.enable(this.knockHitboxes);
 
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');

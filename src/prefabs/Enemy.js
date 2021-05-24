@@ -15,7 +15,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         // Enemys own variables
         this.scene = scene;
         this.health = 100;
-        this.playerLooking = 0;
+        this.playerLooking = "";
         
 
         // CREATE THE STATEMACHINE
@@ -34,8 +34,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
               { name: 'knockTimerFinished',  from: 'knocked',  to: 'layingDown' },
               { name: 'layTimerFinished',  from: 'layingDown',  to: 'idle' },
               { name: 'healthBelowZero',  from: 'layingDown',  to: 'die' },
-              
-              
+              { name: 'goto', from: '*', to: function(s) { return s } }
             ],
             methods: {
                 onIdle: this._onIdle,
@@ -47,12 +46,17 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         
         //Cooldown countdown
         //this.scene.timerLabel = this.scene.add.text(0, 60, 'HELLO', { font: '16px Courier', fill: '#00ff00' });
-        this.stunCountdown = new CountdownController(scene, null, 1500);
-        this.knockCountdown = new CountdownController(scene, null, 800);
+        this.stunCountdown = new CountdownController(scene, null, 1000);
+        this.knockCountdown = new CountdownController(scene, null, 900);
         this.laydownCountdown = new CountdownController(scene, null, 2000);
         
         //collisions
         scene.physics.add.overlap(scene.hitboxes, this, this.enemyStun.bind(this), null);
+        scene.physics.add.overlap(scene.knockHitboxes, this, () => {
+            if(!this.fsm.is('layingDown')){
+                this.fsm.goto('knocked');
+            }
+        }, null);
     }
 
     _onIdle(){
@@ -69,12 +73,13 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     _onEnterKnocked(){
-        if(this.scope.playerLooking == 14){
+        if(this.scope.playerLooking == 'right'){
             this.scope.setBounce(0.8,0.8);
             this.scope.body.velocity.x = 300;
             this.scope.body.velocity.y = 800;
         }
         else{
+            console.log(this.scope.playerLooking);
             this.scope.setBounce(0.8,0.8);
             this.scope.body.velocity.x = -300;
             this.scope.body.velocity.y = 800;
@@ -118,7 +123,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.resetFlip();
         }
 
-        this.playerLooking = player.body.facing;
+        this.playerLooking = player.looking;
     }
 
     enemyStun(){
