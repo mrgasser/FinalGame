@@ -3,46 +3,11 @@ class Play extends Phaser.Scene{
         super("playScene");
     }
 
-    preload() {
-        this.load.spritesheet('the_receptionist', "./assets/Enemies/receptionist.png", {
-            frameWidth: 64,
-            frameHeight: 55,
-            startFrame: 0,
-            endFrame: 18,
-            repeat: -1
-        });
-
-        this.load.spritesheet('main_player', "./assets/Main_Character/mainPlayer.png", {
-            frameWidth: 46,
-            frameHeight: 46,
-            startFrame: 0,
-            endFrame: 15,
-            repeat: -1
-        });
-
-        this.load.spritesheet('enemy1','./assets/enemySprite.png', {
-            frameWidth: 32,
-            frameHeight: 32,
-            startFrame: 0,
-            endFrame: 18,
-            repeat: -1
-        });
-        this.load.spritesheet('main_player_test','./assets/FinalCharacter.png', {
-            frameWidth: 32,
-            frameHeight: 32,
-            startFrame: 0,
-            endFrame: 19,
-            repeat: -1
-        });
-
-    }
-
     create() {
 
         this.gameFloor = this.add.rectangle(0, game.config.height - 10, game.config.width, 50, 0xf0df0f).setOrigin(0);
         this.physics.world.enable(this.gameFloor);
         this.gameFloor.body.setImmovable();
-        //this.gameFloor.body.setFrictionX(100);
 
         // Text for scene
         //this.cursors = this.input.keyboard.createCursorKeys();
@@ -55,6 +20,7 @@ class Play extends Phaser.Scene{
         
         // Return to menu configuration
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
         this.add.text(game.config.width/2, 20, "Press R to return to Menu").setOrigin(0.5);
 
         // Make Animations
@@ -105,16 +71,25 @@ class Play extends Phaser.Scene{
         this.knockHitboxes = this.physics.add.group();
         this.physics.world.enable(this.knockHitboxes);
 
-        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
+        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
+        
+        
+        //this.leftSide = this.add.circle(this.player.x, this.player.y, 30, 30, 0xFFFFFF);
+        //this.rightSide = this.add.circle(this.player.x, this.player.y, 30, 30, 0xFFFFFF);
         
 
         // Physics Collisions
         this.physics.add.collider(this.enemy, this.gameFloor);
         this.physics.add.collider(this.player, this.gameFloor);
+
+        // Scene Change
+        this.input.keyboard.on('keydown-O', this.moveCam.bind(this));
     }
 
-
+    moveCam(){
+        this.cameras.main.pan(game.config.width/2, -game.config.height * 2, 10000);
+    }
 
     update() {
 
@@ -132,8 +107,11 @@ class Play extends Phaser.Scene{
         }
 
         // make circle follow player
-        //this.farRange.x = this.player.x + 150;
-        //this.farRange.y = this.player.y;
+        //this.leftSide.x = this.player.x - 200;
+        //this.leftSide.y = this.player.y;
+
+        //this.rightSide.x = this.player.x + 200;
+        //this.rightSide.y = this.player.y;
 
 
         this.player.update(this);
