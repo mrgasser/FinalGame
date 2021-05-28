@@ -28,6 +28,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.knockCountdown = new CountdownController(scene, null, 900);
         this.laydownCountdown = new CountdownController(scene, null, 2000);
         
+        // Enemy health Bar
+        //this.healthBar = scene.add.rectangle(this.body.x, this.body.y - 40, 50, 10, 0x5be817).setOrigin(0, 0);
+        this.healthBar = new HealthBar(scene, this.body.x, this.body.y);
+        
+        // this.setHealthBar();
+        // scene.add.existing(this.healthBar);
 
         // CREATE THE STATEMACHINE
         this.fsm = {
@@ -229,15 +235,19 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         //this.closest = scene.physics.closest(player);
         //this.furthest = scene.physics.furthest(player);
 
+        // update healthbar
+        this.healthBar.update(this.body.x - 10, this.body.y - 5);
+
         this.playerLooking = player.looking;
     }
 
     enemyStun(){
-        
+
         return new Promise( async (resolve, reject) => {
 
             if(!this.hasOverlapped){
                 this.stunCountdown.start(this.handleFinishedStun.bind(this));
+                this.healthBar.decrease(20); // decrease health by 20
 
                 if(this.fsm.can('knockedPunch')){
                     this.fsm.knockedPunch();
@@ -314,4 +324,32 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     currState(){
         return "is-" + this.fsm.state;
     }
+
+    // setHealthBar() {
+    //     this.healthBar.clear();
+    //     console.log("Setting healthbar");
+        
+    //     this.healthBar.fillStyle(0xFFFFFF);
+    //     this.healthBar.fillRect(this.x, this.y, 70, 20);
+
+    //     if (this.health < 20) {
+    //         this.healthBar.fillStyle(0xFF0000);
+    //     } else {
+    //         this.healthBar.fillStyle(0x00FF00);
+    //     }
+
+    //     let i = Math.floor(76/100 * this.health);
+
+    //     this.healthBar.fillRect(this.x, this.y, i, 20);
+    // }
+
+    // decreaseHealth(num) {
+    //     this.health -= num;
+
+    //     if (this.health < 0) {
+    //         this.health = 0;
+    //     }
+
+    //     this.setHealthBar();
+    // }
 }
