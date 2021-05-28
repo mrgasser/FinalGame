@@ -3,13 +3,6 @@ class Menu extends Phaser.Scene{
         super("menuScene");
     }
 
-    preload() {
-        
-        //load audio
-        this.load.audio('sfx_select_2', './assets/audio/selectSFX_2.wav');
-        this.load.audio('sfx_punch', './assets/audio/punch.wav');
-    }
-
     create() {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.add.text(0, 0, "MENU").setOrigin(0, 0);

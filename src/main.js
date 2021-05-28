@@ -19,7 +19,7 @@ let config = {
     },
     autoCenter: true,
     
-    scene: [Menu, Play]
+    scene: [Load, Menu, Play]
 }
 
 let game = new Phaser.Game(config);
@@ -29,6 +29,6 @@ let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
 // Reserve Keys
-let keySPACE, keyR;
+let keySPACE, keyR, keyO;
 
 let cursors;

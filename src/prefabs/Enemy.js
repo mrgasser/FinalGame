@@ -12,10 +12,21 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.body.setSize(25, this.height, true);
         this.setGravityY(2000);
 
-        // Enemys own variables
+        // Enemies own variables
         this.scene = scene;
         this.health = 100;
         this.playerLooking = "";
+        this.enemyLooking = "";
+        this.closest = 0;
+        this.furthest = 0;
+        this.randomDistance = 0;
+
+        // Timers
+        this.idleCountdown = new CountdownController(scene, null, 1000);
+        this.resetBuffer = new CountdownController(scene, null, 100);
+        this.stunCountdown = new CountdownController(scene, null, 1000);
+        this.knockCountdown = new CountdownController(scene, null, 900);
+        this.laydownCountdown = new CountdownController(scene, null, 2000);
         
         // Enemy health Bar
         //this.healthBar = scene.add.rectangle(this.body.x, this.body.y - 40, 50, 10, 0x5be817).setOrigin(0, 0);
@@ -31,12 +42,17 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         StateMachine.apply(this.fsm, {
             init: 'idle',
             transitions: [
-              { name: 'punched',  from: 'idle',  to: 'stunned' },
+              { name: 'punched',  from: ['idle', 'patrolling', 'attack'],  to: 'stunned' },
               { name: 'punched2',  from: 'stunned',  to: 'stunned2' },
               { name: 'punched3',  from: 'stunned2',  to: 'stunned3' },
               { name: 'knockedPunch',  from: 'stunned3',  to: 'knocked' },
+
+              { name: 'notInRange',  from: 'idle',  to: 'patrolling' },
+              { name: 'finishedRandomSpot',  from: 'patrolling',  to: 'idle' },
+              { name: 'inRange',  from: 'idle',  to: 'attack' },
+              { name: 'finishedPunch',  from: 'attack',  to: 'idle' },
+
               { name: 'stunTimerFinished',  from: ['stunned', 'stunned2', 'stunned3'],  to: 'idle' },
-              
               { name: 'knockTimerFinished',  from: 'knocked',  to: 'layingDown' },
               { name: 'layTimerFinished',  from: 'layingDown',  to: 'idle' },
               { name: 'healthBelowZero',  from: 'layingDown',  to: 'die' },
@@ -44,18 +60,15 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             ],
             methods: {
                 onIdle: this._onIdle,
+                onExitIdle: () => {this.idleCountdown.stop();},
                 onStunned: this._onStunned,
                 onEnterKnocked: this._onEnterKnocked,
                 onLayingDown: this._onLayingDown,
+                onPatrolling: this._onPatrolling,
+                onAttack: this._onAttack,
             }
           });
-        
-        //Cooldown countdown
-        //this.scene.timerLabel = this.scene.add.text(0, 60, 'HELLO', { font: '16px Courier', fill: '#00ff00' });
-        this.stunCountdown = new CountdownController(scene, null, 1000);
-        this.knockCountdown = new CountdownController(scene, null, 900);
-        this.laydownCountdown = new CountdownController(scene, null, 2000);
-        
+                
         //collisions
         scene.physics.add.overlap(scene.hitboxes, this, this.enemyStun.bind(this), null);
         scene.physics.add.overlap(scene.knockHitboxes, this, () => {
@@ -63,15 +76,101 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
                 this.fsm.goto('knocked');
             }
         }, null);
+
+        
+    }
+
+    _onPatrolling(){
+        // Tween stuff
+        this.scope.patrolPlayer = this.scope.scene.tweens.add({
+            targets: this.scope, 
+            x: this.scope.x + this.scope.getRandomDistance(),
+            duration: this.scope.getAppropriateTime(),
+            ease: 'Linear',
+            paused:true,
+        });
+
+        this.scope.patrolPlayer.on('complete', () => {
+            console.log("finished");
+            this.scope.patrolPlayer.remove();
+            if(this.scope.fsm.can('finishedRandomSpot')){
+                this.scope.fsm.finishedRandomSpot();
+            } 
+        });
+
+        this.scope.patrolPlayer.play();
+    }
+
+    getRandomDistance(){
+        this.randomDistance = (Math.random() * (250 - 200) + 200);
+        var leftEdgeScreen = 0;
+        var rightEdgeScreen = game.config.width;
+
+        var canGoLeft = (this.x - this.randomDistance) >= 0;
+        var canGoRight = (this.x + this.randomDistance) <= rightEdgeScreen;
+
+        //console.log('Left: '+ canGoLeft + ' Right: '+ canGoRight);
+        //console.log('Left: '+ cantGoLeft + ' Right: '+ cantGoRight);
+        if(canGoLeft && canGoRight){
+            //console.log("random");
+            return this.randomDistance * (Math.random() - 0.5) * 2;
+        }
+
+        else if(canGoLeft){
+            //console.log("going Left");
+            return -this.randomDistance;
+        }
+
+        else if(canGoRight){
+            //console.log("going Right");
+            return this.randomDistance;
+        }
+
+    }
+
+    getAppropriateTime(){
+        console.log(this.randomDistance);
+        return 2000;
     }
 
     _onIdle(){
         console.log("onIdle");
         this.scope.play('recepIdle');
+        if(this.scope.scene.player){
+            var minRangeX = 150;
+        }
+        else{
+            console.log("undefined player");
+        }
+
+        this.scope.idleCountdown.start(() => {
+            
+            console.log("idle Timer ran out");
+            var distanceFromPlayer = Phaser.Math.Distance.Between(this.scope.scene.player.x, this.scope.scene.player.y, this.scope.x, this.scope.y);
+            
+            if(distanceFromPlayer <= minRangeX){
+                console.log("in_range_x: Distance from player: " + distanceFromPlayer);
+                if(this.scope.fsm.can('inRange')){
+                    this.scope.fsm.inRange();
+                }
+            }
+            else{
+                //out of Range, just patrol until you get close
+                console.log("outOfRange_x: Distance from player: " + distanceFromPlayer);
+                if(this.scope.fsm.can('notInRange')){
+                    this.scope.fsm.notInRange();
+                }
+            }
+        
+        });
     }
 
     _onStunned(){
         console.log("onStunned");
+        this.scope.patrolPlayer.stop();
+        this.scope.idleCountdown.stop();
+        
+        
         this.scope.body.stop();
         this.scope.stop();
 
@@ -79,6 +178,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     _onEnterKnocked(){
+        this.scope.patrolPlayer.stop();
         if(this.scope.playerLooking == 'right'){
             this.scope.setBounce(0.8,0.8);
             this.scope.body.velocity.x = 300;
@@ -98,6 +198,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.scope.play('recepLaydown', true);
         this.scope.laydownCountdown.start(this.scope.handleFinishedLayingDown.bind(this));
     }
+
 
     handleFinishedStun(){
         if(this.fsm.can('stunTimerFinished')){
@@ -122,15 +223,19 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     update(scene, player){
-        if(this.body.facing == 13){
+        if((this.x - player.x) < 0){
+            this.enemyLooking = "right";
             this.setFlip(true, false);
         }
-        if(this.body.facing == 14){
+        else{
+            this.enemyLooking = "left";
             this.resetFlip();
         }
 
         // update healthbar
         this.healthBar.update(this.body.x - 10, this.body.y - 5);
+        //this.closest = scene.physics.closest(player);
+        //this.furthest = scene.physics.furthest(player);
 
         this.playerLooking = player.looking;
     }
@@ -168,11 +273,51 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         
     }
 
-    keepDistance(scene, player){
-        if(this.x < player.body.x + 50){
-            this.state.isMoving = true;
-            scene.physics.accelerateToObject(this, scene.farRange, 1000, 120, 2000);   
+    _onAttack(){
+
+        return new Promise( async (resolve, reject) => {
+
+            //Play the anim
+            //this.play('playerPunch');
+
+            setTimeout( () => {
+                // checks which direction player is facing to spawn punch hitbox
+                if (this.scope.enemyLooking == 'left') {
+                    this.scope._spawnHitbox(this.scope.enemyLooking);
+                } 
+                else{
+                    this.scope._spawnHitbox(this.scope.enemyLooking);
+                }
+                
+                //play the sound
+                //this.scope.scene.sound.play('sfx_punch');
+
+            }, 100);
+
+            setTimeout( () => {
+                this.scope.punch.destroy();
+                this.scope.fsm.finishedPunch();
+            }, 300);
+            return resolve();    
+        });
+
+    }
+
+    _spawnHitbox(direction){
+        if(direction == 'left'){
+            this.punch = this.scene.add.rectangle(this.x - 50, this.y - 0, 100, 40, 0xffffff).setAlpha(0);
         }
+        else{
+            this.punch = this.scene.add.rectangle(this.x + 50, this.y - 0, 100, 40, 0xffffff).setAlpha(0);
+        }
+        this.scene.physics.add.existing(this.punch);
+
+        // if(type.hitbox == 'regular'){
+        //     this.scene.hitboxes.add(this.punch);
+        // }
+        // else if(type.hitbox == 'knock'){
+        //     this.scene.knockHitboxes.add(this.punch);
+        // }
     }
 
     currState(){
