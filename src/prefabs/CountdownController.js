@@ -24,7 +24,7 @@ class CountdownController extends Phaser.Time.TimerEvent {
                     this.label.text = '0';
                 }
                 this.stop();
-                if(callback){
+                if(callback && this.timerEvent){
                     // if(scope != undefined){
                     //     callback().bind(this.scope);
                     // }
@@ -48,6 +48,11 @@ class CountdownController extends Phaser.Time.TimerEvent {
         if(this.label != null){
             this.label.text = seconds.toFixed(2);
         }
+    }
+
+    kill(){
+        this.reset();
+        this.destroy();
     }
 
     stop(){
