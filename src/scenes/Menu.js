@@ -12,7 +12,11 @@ class Menu extends Phaser.Scene{
 
         this.cursors = this.input.keyboard.createCursorKeys()
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        
+
+        this.skyline = this.add.image(game.config.width/2, game.config.height/2, 'skyline').setOrigin(0.5, 0.5);
+        this.skyline.displayWidth = game.config.width;
+        this.skyline.displayHeight = game.config.height;
+
         this.menuTitle = this.add.image(600, 120, 'wallStreetFighter').setOrigin(0.5, 0.5);
         this.menuTitle.displayWidth = 600;
         this.menuTitle.displayHeight = 300;
@@ -41,11 +45,11 @@ class Menu extends Phaser.Scene{
             console.log('tutorial')
         });
 
-        // TURNING OFF EVENTS
-        // this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-        //     playButtonText.off('selected');
-        //     tutorialButtonText.off('selected');
-        // })
+        //TURNING OFF EVENTS
+        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            this.playButtonText.off('selected');
+            this.tutorialButtonText.off('selected');
+        })
 
     }
 
@@ -55,13 +59,6 @@ class Menu extends Phaser.Scene{
         const upJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.up);
 		const downJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.down);
 		const spaceJustPressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
-
-        if(this.insertedCoin && this.doOnce){
-            this.doOnce = false;
-            this.flash.stop();
-            this.insertCoin.destroy();
-            this.moveTitle.play();
-        }
 
         if (upJustPressed){
 			this.selectNextButton(-1);

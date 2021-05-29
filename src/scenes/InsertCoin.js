@@ -7,10 +7,16 @@ class InsertCoin extends Phaser.Scene{
         
         this.insertedCoin = false;
         this.doOnce = true;
-        
+
+        this.skyline = this.add.image(game.config.width/2, game.config.height/2, 'skyline').setOrigin(0.5, 0.5).setAlpha(0);
+        this.skyline.displayWidth = game.config.width;
+        this.skyline.displayHeight = game.config.height;
+
         this.menuTitle = this.add.image(game.config.width/2, game.config.height/2, 'wallStreetFighter').setOrigin(0.5, 0.5);
         this.menuTitle.displayWidth = 600;
         this.menuTitle.displayHeight = 300;
+
+        
 
         this.insertCoin = this.add.text(game.config.width/2, game.config.height/2 + game.config.height/2.5, "INSERT COIN", 'Lucida Sans Unicode').setOrigin(0.5, 0.5);
         this.insertCoin.setFontSize(20);
@@ -34,6 +40,14 @@ class InsertCoin extends Phaser.Scene{
             onComplete: () => {this.scene.start('menuScene')}
         });
 
+        this.alphaSkyline = this.tweens.add({
+            targets: this.skyline,
+            alpha: 1,
+            duration: 3000,
+            ease: 'Sine.easeInOut',
+            paused: true,
+        });
+
     }
 
 
@@ -44,6 +58,7 @@ class InsertCoin extends Phaser.Scene{
             this.flash.stop();
             this.insertCoin.destroy();
             this.moveTitle.play();
+            this.alphaSkyline.play();
         }
 
     }

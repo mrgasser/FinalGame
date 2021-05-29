@@ -43,6 +43,7 @@ class Load extends Phaser.Scene{
 
         // LOAD IMAGES
         this.load.image('wallStreetFighter', './assets/images/menuTitle.png');
+        this.load.image('skyline', './assets/images/skyline.png');
 
         // LOAD AUDIO
         this.load.audio('sfx_select_2', './assets/audio/selectSFX_2.wav');

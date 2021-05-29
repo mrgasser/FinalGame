@@ -81,6 +81,8 @@ class Play extends Phaser.Scene{
         // Initialize the prefabs in the scene
         this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
+        this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
+        
         
         
         //this.leftSide = this.add.circle(this.player.x, this.player.y, 30, 30, 0xFFFFFF);
@@ -88,7 +90,7 @@ class Play extends Phaser.Scene{
         
 
         // Physics Collisions
-        this.physics.add.collider(this.enemy, this.gameFloor);
+        this.physics.add.collider(this.enemyGroup, this.gameFloor);
         this.physics.add.collider(this.player, this.gameFloor);
 
         // Scene Camera Test
@@ -125,6 +127,7 @@ class Play extends Phaser.Scene{
 
         this.player.update(this);
         this.enemy.update(this, this.player);
+        this.enemy2.update(this, this.player);
 
         // go to menu scene
         if (Phaser.Input.Keyboard.JustDown(keyR)) {

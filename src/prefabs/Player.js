@@ -118,6 +118,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.displayHeight -= 1;
             this.displayWidth += .5;
             this.VELOCITY -= 10;
+            this.setTintFill();
             //console.log(this.power);
         }
     }
