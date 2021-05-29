@@ -91,7 +91,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         });
 
         this.scope.patrolPlayer.on('complete', () => {
-            console.log("finished");
+            //console.log("finished");
             this.scope.patrolPlayer.remove();
             if(this.scope.fsm.can('finishedRandomSpot')){
                 this.scope.fsm.finishedRandomSpot();
@@ -129,12 +129,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     getAppropriateTime(){
-        console.log(this.randomDistance);
+        //console.log(this.randomDistance);
         return 2000;
     }
 
     _onIdle(){
-        console.log("onIdle");
+        //console.log("onIdle");
         this.scope.play('recepIdle');
         if(this.scope.scene.player){
             var minRangeX = 150;
@@ -145,18 +145,18 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
         this.scope.idleCountdown.start(() => {
             
-            console.log("idle Timer ran out");
+            //console.log("idle Timer ran out");
             var distanceFromPlayer = Phaser.Math.Distance.Between(this.scope.scene.player.x, this.scope.scene.player.y, this.scope.x, this.scope.y);
             
             if(distanceFromPlayer <= minRangeX){
-                console.log("in_range_x: Distance from player: " + distanceFromPlayer);
+                //console.log("in_range_x: Distance from player: " + distanceFromPlayer);
                 if(this.scope.fsm.can('inRange')){
                     this.scope.fsm.inRange();
                 }
             }
             else{
                 //out of Range, just patrol until you get close
-                console.log("outOfRange_x: Distance from player: " + distanceFromPlayer);
+                //console.log("outOfRange_x: Distance from player: " + distanceFromPlayer);
                 if(this.scope.fsm.can('notInRange')){
                     this.scope.fsm.notInRange();
                 }
@@ -185,7 +185,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.scope.body.velocity.y = 800;
         }
         else{
-            console.log(this.scope.playerLooking);
+            //console.log(this.scope.playerLooking);
             this.scope.setBounce(0.8,0.8);
             this.scope.body.velocity.x = -300;
             this.scope.body.velocity.y = 800;
@@ -202,7 +202,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     handleFinishedStun(){
         if(this.fsm.can('stunTimerFinished')){
-            console.log("stunTimerRanOut");
+            //console.log("stunTimerRanOut");
             this.fsm.stunTimerFinished();
         }
     }
@@ -296,7 +296,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
             setTimeout( () => {
                 this.scope.punch.destroy();
-                this.scope.fsm.finishedPunch();
+                if(this.scope.fsm.can("finishedPunch")){
+                    this.scope.fsm.finishedPunch();
+                }
             }, 300);
             return resolve();    
         });

@@ -65,12 +65,20 @@ class Play extends Phaser.Scene{
         //     repeat: -1
         // });
 
+        // Initialize all the different groups
         this.hitboxes = this.physics.add.group();
         this.physics.world.enable(this.hitboxes);
 
         this.knockHitboxes = this.physics.add.group();
         this.physics.world.enable(this.knockHitboxes);
 
+        this.enemyHitboxes = this.physics.add.group();
+        this.physics.world.enable(this.enemyHitboxes);
+
+        this.enemyGroup = this.physics.add.group();
+        this.physics.world.enable(this.enemyHitboxes);
+
+        // Initialize the prefabs in the scene
         this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         
@@ -83,12 +91,13 @@ class Play extends Phaser.Scene{
         this.physics.add.collider(this.enemy, this.gameFloor);
         this.physics.add.collider(this.player, this.gameFloor);
 
-        // Scene Change
+        // Scene Camera Test
         this.input.keyboard.on('keydown-O', this.moveCam.bind(this));
     }
 
     moveCam(){
         this.cameras.main.pan(game.config.width/2, -game.config.height * 2, 10000);
+        this.cameras.main.on('pancomplete', () => {console.log("finished pan");});
     }
 
     update() {

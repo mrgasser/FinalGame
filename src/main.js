@@ -19,7 +19,7 @@ let config = {
     },
     autoCenter: true,
     
-    scene: [Load, Menu, Play]
+    scene: [Load, InsertCoin, Menu, Play]
 }
 
 let game = new Phaser.Game(config);

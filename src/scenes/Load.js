@@ -35,8 +35,14 @@ class Load extends Phaser.Scene{
             progressBar.destroy();
             progressBox.destroy();
             loadingText.destroy();
-            this.scene.start('menuScene');
+            this.scene.start('coinScene');
         });
+
+        // PLUGINS
+        this.load.plugin('rexflashplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexflashplugin.min.js', true);
+
+        // LOAD IMAGES
+        this.load.image('wallStreetFighter', './assets/images/menuTitle.png');
 
         // LOAD AUDIO
         this.load.audio('sfx_select_2', './assets/audio/selectSFX_2.wav');
