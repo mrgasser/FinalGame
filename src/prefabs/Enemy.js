@@ -12,6 +12,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.body.setSize(25, this.height, true);
         this.setGravityY(2000);
 
+        // The key for anims
+        this.key = 'recep';
+
         // Enemies own variables
         this.scene = scene;
         this.health = 100;
@@ -66,18 +69,32 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
                 onLayingDown: this._onLayingDown,
                 onPatrolling: this._onPatrolling,
                 onAttack: this._onAttack,
+                onDie: this._onDie,
             }
           });
                 
         //collisions
         scene.physics.add.overlap(scene.hitboxes, this, this.enemyStun.bind(this), null);
         scene.physics.add.overlap(scene.knockHitboxes, this, () => {
-            if(!this.fsm.is('layingDown')){
+            if(!this.fsm.is('layingDown') && !this.fsm.is('die')){
                 this.fsm.goto('knocked');
             }
         }, null);
 
+        this.flash = scene.plugins.get('rexflashplugin').add(this, {
+            duration: 300,
+            repeat: 5
+        });
+
         
+    }
+
+    _onDie(){
+        this.scope.flash.flash();
+        this.scope.flash.on('complete', () => {
+            this.scope.healthBar.bar.destroy();
+            this.scope.destroy();
+        });
     }
 
     _onPatrolling(){
@@ -98,6 +115,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             } 
         });
 
+        this.scope.play(this.scope.key + 'Walk');
         this.scope.patrolPlayer.play();
     }
 
@@ -214,10 +232,12 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     handleFinishedLayingDown(){
-        if(this.scope.health <= 0){
+        if(this.scope.healthBar.health <= 0){
+            //console.log("im dead: " + this.scope.healthBar.health);
             this.scope.fsm.healthBelowZero();
         }
         else{
+            //console.log("im still alive: " + this.scope.healthBar.health);
             this.scope.fsm.layTimerFinished();
         }
     }
@@ -233,7 +253,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
 
         // update healthbar
-        this.healthBar.update(this.body.x - 10, this.body.y - 5);
+        if(this.healthBar && this.body){
+            this.healthBar.update(this.body.x - 10, this.body.y - 20);
+        }
         //this.closest = scene.physics.closest(player);
         //this.furthest = scene.physics.furthest(player);
 
@@ -246,7 +268,16 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
             if(!this.hasOverlapped){
                 this.stunCountdown.start(this.handleFinishedStun.bind(this));
-                this.healthBar.decrease(20); // decrease health by 20
+                 // decrease health by 20
+
+                if(!this.fsm.is('layingDown') && !this.fsm.is('knocked') && !this.fsm.is('die')){
+                    this.healthBar.decrease(15);
+
+                    if(this.healthBar.health <= 0){
+                        //console.log("less than zero, KNOCKED");
+                        this.fsm.goto('knocked');
+                    }
+                }
 
                 if(this.fsm.can('knockedPunch')){
                     this.fsm.knockedPunch();
@@ -278,7 +309,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         return new Promise( async (resolve, reject) => {
 
             //Play the anim
-            //this.play('playerPunch');
+            this.scope.play('recepPunch');
 
             setTimeout( () => {
                 // checks which direction player is facing to spawn punch hitbox

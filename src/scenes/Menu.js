@@ -11,7 +11,6 @@ class Menu extends Phaser.Scene{
 	    this.selectedButtonIndex = 0;
 
         this.cursors = this.input.keyboard.createCursorKeys()
-        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         this.skyline = this.add.image(game.config.width/2, game.config.height/2, 'skyline').setOrigin(0.5, 0.5);
         this.skyline.displayWidth = game.config.width;
@@ -36,15 +35,18 @@ class Menu extends Phaser.Scene{
 
         // START SCENES IF SELECTED
         this.playButtonText.on('selected', () => {
-            console.log('play');
             this.sound.play('sfx_select_2');
-            this.scene.start('playScene');
+            this.cameras.main.fadeOut(1000);
         });
 
         this.tutorialButtonText.on('selected', () => {
             console.log('tutorial')
         });
 
+        this.cameras.main.on("camerafadeoutcomplete", () => {
+            this.scene.start('tutorialScene');
+        });
+        
         //TURNING OFF EVENTS
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.playButtonText.off('selected');
@@ -69,6 +71,8 @@ class Menu extends Phaser.Scene{
 		else if (spaceJustPressed){
 			this.confirmSelection();
 		}
+
+        
     }
 
     selectButton(number){

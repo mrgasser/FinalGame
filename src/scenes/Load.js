@@ -44,9 +44,13 @@ class Load extends Phaser.Scene{
         // LOAD IMAGES
         this.load.image('wallStreetFighter', './assets/images/menuTitle.png');
         this.load.image('skyline', './assets/images/skyline.png');
+        this.load.image('lobby', './assets/HotelLobbyv1.png');
+        this.load.image('checkmark', './assets/checkMark.png');
+        this.load.image('upArrow', './assets/upArrow.png');
 
         // LOAD AUDIO
         this.load.audio('sfx_select_2', './assets/audio/selectSFX_2.wav');
+        this.load.audio('tutorialBeat', './assets/audio/datTutorial.wav');
         this.load.audio('sfx_punch', './assets/audio/punch.wav');
 
         // LOAD SPRITESHEETS
@@ -54,7 +58,7 @@ class Load extends Phaser.Scene{
             frameWidth: 64,
             frameHeight: 55,
             startFrame: 0,
-            endFrame: 18,
+            endFrame: 29,
             repeat: -1
         });
 
@@ -80,8 +84,6 @@ class Load extends Phaser.Scene{
             endFrame: 19,
             repeat: -1
         });
-
-        // LOAD IMAGES
 
     }
 }

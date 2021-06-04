@@ -8,6 +8,8 @@ class InsertCoin extends Phaser.Scene{
         this.insertedCoin = false;
         this.doOnce = true;
 
+        keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+
         this.skyline = this.add.image(game.config.width/2, game.config.height/2, 'skyline').setOrigin(0.5, 0.5).setAlpha(0);
         this.skyline.displayWidth = game.config.width;
         this.skyline.displayHeight = game.config.height;
@@ -60,6 +62,10 @@ class InsertCoin extends Phaser.Scene{
             this.moveTitle.play();
             this.alphaSkyline.play();
         }
+
+        if (Phaser.Input.Keyboard.JustDown(keyP)){
+			this.scene.start('tutorialScene');
+		}
 
     }
 }
