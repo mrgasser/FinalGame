@@ -94,6 +94,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.scope.flash.on('complete', () => {
             this.scope.healthBar.bar.destroy();
             this.scope.destroy();
+            score += 10;
         });
     }
 

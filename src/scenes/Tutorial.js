@@ -167,7 +167,7 @@ class Tutorial extends Phaser.Scene{
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             this.sound.play('sfx_select_2');
             this.tutorialTheme.stop();
-            this.scene.start('menuScene');
+            this.scene.start('playScene');
         }
 
     }

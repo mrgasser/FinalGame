@@ -11,6 +11,8 @@ class Play extends Phaser.Scene{
 
         // Text for scene
         //this.cursors = this.input.keyboard.createCursorKeys();
+        this.add.text(1, 20, "Score:");
+        this.scoreText = this.add.text(60, 20, "0");
         this.add.text(1, 0, "Play Scene");
         this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
         this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
@@ -52,19 +54,6 @@ class Play extends Phaser.Scene{
             //repeat: -1
         });
 
-        // this.anims.create({
-        //     key: 'recepWalk',
-        //     frames: this.anims.generateFrameNumbers('the_receptionist', {start: 14, end: 17}),
-        //     frameRate: 8,
-        //     repeat: -1
-        // });
-        // this.anims.create({
-        //     key: 'recepPunch',
-        //     frames: this.anims.generateFrameNumbers('the_receptionist', {start: 6, end: 13}),
-        //     frameRate: 25,
-        //     repeat: -1
-        // });
-
         // Initialize all the different groups
         this.hitboxes = this.physics.add.group();
         this.physics.world.enable(this.hitboxes);
@@ -83,18 +72,23 @@ class Play extends Phaser.Scene{
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         
-        
-        
         //this.leftSide = this.add.circle(this.player.x, this.player.y, 30, 30, 0xFFFFFF);
         //this.rightSide = this.add.circle(this.player.x, this.player.y, 30, 30, 0xFFFFFF);
         
-
         // Physics Collisions
         this.physics.add.collider(this.enemyGroup, this.gameFloor);
         this.physics.add.collider(this.player, this.gameFloor);
 
         // Scene Camera Test
         this.input.keyboard.on('keydown-O', this.moveCam.bind(this));
+
+        // this.enemyAmount = 3;
+        // this.enemyGroupTest = this.physics.add.group({
+        //     key: "enemy",
+        //     repeat: this.enemyAmount - 1,
+        // })
+        this.wave = 1;
+
     }
 
     moveCam(){
@@ -106,28 +100,25 @@ class Play extends Phaser.Scene{
 
         //Debug stuff
         {
-            this.playerState.x = this.player.body.x;
-            this.playerState.y = this.player.body.y - 20;
-            this.enemyState.x = this.enemy.body.x;
-            this.enemyState.y = this.enemy.body.y - 20;
+            // this.playerState.x = this.player.body.x;
+            // this.playerState.y = this.player.body.y - 20;
+            // this.enemyState.x = this.enemy.body.x;
+            // this.enemyState.y = this.enemy.body.y - 20;
 
-            this.facing.setText('Enemy: ' + this.enemy.body.facing);
-            this.facingPlayer.setText('Player: ' + this.player.body.facing);
-            this.playerState.setText(this.player.currState());
+            // this.facing.setText('Enemy: ' + this.enemy.body.facing);
+            // this.facingPlayer.setText('Player: ' + this.player.body.facing);
+            // this.playerState.setText(this.player.currState());
             this.enemyState.setText(this.enemy.currState());
         }
 
-        // make circle follow player
-        //this.leftSide.x = this.player.x - 200;
-        //this.leftSide.y = this.player.y;
-
-        //this.rightSide.x = this.player.x + 200;
-        //this.rightSide.y = this.player.y;
-
-
         this.player.update(this);
-        this.enemy.update(this, this.player);
-        this.enemy2.update(this, this.player);
+        if (this.wave = 1) {
+            this.enemy.update(this, this.player);
+            this.enemy2.update(this, this.player);
+            if (this.enemy.currState == "die") {
+                console.log("enemies dead");
+            }
+        }
 
         // go to menu scene
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
@@ -135,5 +126,7 @@ class Play extends Phaser.Scene{
             this.scene.start('menuScene');
         }
 
+        // update score
+        this.scoreText.text = score;
     }
 }

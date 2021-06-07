@@ -30,5 +30,6 @@ let borderPadding = borderUISize / 3;
 
 // Reserve Keys
 let keySPACE, keyR, keyO, keyP;
+let score = 0;
 
 let cursors;
