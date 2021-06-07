@@ -163,10 +163,10 @@ class Tutorial extends Phaser.Scene{
             this.enemy.update(this, this.player);
         }
         
-
         // go to menu scene
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             this.sound.play('sfx_select_2');
+            this.tutorialTheme.stop();
             this.scene.start('menuScene');
         }
 
