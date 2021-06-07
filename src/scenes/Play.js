@@ -13,7 +13,7 @@ class Play extends Phaser.Scene{
         //this.cursors = this.input.keyboard.createCursorKeys();
         this.add.text(1, 20, "Score:");
         this.scoreText = this.add.text(60, 20, "0");
-        this.add.text(1, 0, "Play Scene");
+        this.add.text(1, 5, "Health:");
         this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
         this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
         this.playerState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });

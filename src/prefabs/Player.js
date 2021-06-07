@@ -16,6 +16,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene = scene;
         this.power = 0;
         this.looking = 'right';
+        this.healthBar = new HealthBar(scene, 75, 5);
 
         // Physics Variables
         this.VELOCITY = 200;
@@ -79,7 +80,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.lastTime = 0;
         scene.input.keyboard.on('keydown-SPACE', this.startPunch.bind(this));
         scene.input.keyboard.on('keyup-SPACE', this.endPunch.bind(this));
-        
         
     }
 
