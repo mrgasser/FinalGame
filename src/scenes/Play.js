@@ -36,34 +36,6 @@ class Play extends Phaser.Scene{
         keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
         this.add.text(game.config.width/2, 20, "Press R to return to Menu").setOrigin(0.5);
 
-        // Make Animations
-        this.anims.create({
-            key: 'recepIdle',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 0, end: 7}),
-            frameRate: 15,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'recepStun',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 8, end: 11}),
-            frameRate: 15,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'recepKnocked',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 12, end: 13}),
-            frameRate: 2,
-            //repeat: -1
-        });
-
-        this.anims.create({
-            key: 'recepLaydown',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 18}),
-            //frameRate: 10,
-            //repeat: -1
-        });
 
         // this.anims.create({
         //     key: "playerDied",
@@ -85,12 +57,18 @@ class Play extends Phaser.Scene{
 
         // Initialize the prefabs in the scene
         this.player = new Player(this, game.config.width/3, game.config.height - 100, 120, 35, 'main_player');
-        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height - 100, 'the_receptionist');
-        this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height - 100, 'the_receptionist');
-        this.enemyGroup.add(this.enemy);
-        this.enemyGroup.add(this.enemy2);
+// <<<<<<< songs-and-tutorial-prompts
+//         //this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
+//         //this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
+        
+// =======
+//         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height - 100, 'the_receptionist');
+//         this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height - 100, 'the_receptionist');
+//         this.enemyGroup.add(this.enemy);
+//         this.enemyGroup.add(this.enemy2);
     
-        // game over bools
+//         // game over bools
+// >>>>>>> main
         this.gameOver = false;
         this.end = true;
         
@@ -107,6 +85,20 @@ class Play extends Phaser.Scene{
         this.cameras.main.setZoom(1.1, 1.1);
         this.cameras.main.startFollow(this.player, false, 0.01, 0.01);
 
+        this.enemyObjects = this.add.group();
+        this.enemyObjects.createMultiple({
+            classType: Enemy,
+            key: 'the_receptionist',
+            //runChildUpdate: true,
+            repeat: -1,
+            maxSize: 3,
+            setXY: {
+                x:100,
+                y:100,
+                stepX:0,
+                stepY:0
+            },
+        })
         this.playTheme = this.sound.add("playBeat");
         var musicConfig = {
             mute: false,
@@ -153,11 +145,15 @@ class Play extends Phaser.Scene{
             //this.enemyState.setText(this.enemy.currState());
         }
 
+        //this.player.update(this);
+        //this.enemy.update(this, this.player);
+        //this.enemy2.update(this, this.player);
+
         if (this.end) {
             this.player.update(this);
         }
-        this.enemy.update(this, this.player);
-        this.enemy2.update(this, this.player);
+        //this.enemy.update(this, this.player);
+        //this.enemy2.update(this, this.player);
 
         if (this.end && this.player.healthBar.health == 0) {
             this.gameOverFucn();

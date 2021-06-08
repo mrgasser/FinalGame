@@ -67,7 +67,7 @@ class InsertCoin extends Phaser.Scene{
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyP)){
-			this.scene.start('tutorialScene');
+			this.scene.start('playScene');
 		}
 
     }
