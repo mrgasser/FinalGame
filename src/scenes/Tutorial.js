@@ -15,9 +15,14 @@ class Tutorial extends Phaser.Scene{
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
 
-        //Make the background
+        // Make the background
         this.lobbyBackground = this.add.image(0, 0, 'lobby').setOrigin(0,0);
         this.lobbyBackground.setDisplaySize(game.config.width, game.config.height);
+
+        // Make the prompts
+        this.walkPrompt = this.add.image(game.config.width/4, game.config.height/4, 'walkPrompt').setOrigin(0,0);
+        this.punchPrompt = this.add.image(game.config.width * (2/4), game.config.height/4, 'punchPrompt').setOrigin(0,0);
+        this.superPrompt = this.add.image(game.config.width * (3/4), game.config.height/4, 'superPrompt').setOrigin(0,0);
 
         // Text for scene
         //this.cursors = this.input.keyboard.createCursorKeys();
@@ -58,14 +63,11 @@ class Tutorial extends Phaser.Scene{
             key: 'recepKnocked',
             frames: this.anims.generateFrameNumbers('the_receptionist', {start: 12, end: 13}),
             frameRate: 2,
-            //repeat: -1
         });
 
         this.anims.create({
             key: 'recepLaydown',
             frames: this.anims.generateFrameNumbers('the_receptionist', {start: 18, end:18}),
-            //frameRate: 10,
-            //repeat: -1
         });
 
         this.anims.create({
@@ -79,7 +81,6 @@ class Tutorial extends Phaser.Scene{
             key: 'recepPunch',
             frames: this.anims.generateFrameNumbers('the_receptionist', {start: 19, end: 25}),
             frameRate: 30,
-            //repeat: -1
         });
 
         // Initialize all the different groups
@@ -100,7 +101,6 @@ class Tutorial extends Phaser.Scene{
         this.enemyGroup.add(this.enemy);
         
         this.enemy.on('destroy', () => {
-            //console.log("im dead");
             this.upArrow.setAlpha(1);
             this.physics.add.existing(this.upArrow);
             this.arrowFlash.flash();
@@ -145,6 +145,25 @@ class Tutorial extends Phaser.Scene{
         this.cameras.main.setBounds(0, 0, game.config.width, game.config.height, true);
         this.cameras.main.setZoom(1.1, 1.1);
         this.cameras.main.startFollow(this.player, false, 0.01, 0.01);
+
+        // MAKE THE CHECKMARKS
+        
+        
+
+        // EVENT FOR CHECKMARKS
+        this.input.keyboard.once('keydown-LEFT', () => {
+            this.check1 = this.add.image(this.walkPrompt.x + 30, this.walkPrompt.y + 80, 'checkmark').setOrigin(0,0);
+        });
+        this.input.keyboard.once('keydown-RIGHT', () => {
+            this.check1 = this.add.image(this.walkPrompt.x + 30, this.walkPrompt.y + 80, 'checkmark').setOrigin(0,0);
+        });
+
+        this.input.keyboard.once('keydown-SPACE', () => {
+            this.check2 = this.add.image(this.punchPrompt.x + 30, this.punchPrompt.y + 80, 'checkmark').setOrigin(0,0);
+        });
+        this.player.once('powerPunch', () => {
+            this.check3 = this.add.image(this.superPrompt.x + 30, this.superPrompt.y + 80, 'checkmark').setOrigin(0,0);
+        });
     }
 
     moveCam(){

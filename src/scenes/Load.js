@@ -52,9 +52,15 @@ class Load extends Phaser.Scene{
         this.load.image('upArrow', './assets/upArrow.png');
         this.load.image('clouds', './assets/images/CloudsParallax.png');
 
+        this.load.image('walkPrompt', './assets/walkPrompt.png');
+        this.load.image('punchPrompt', './assets/PunchPrompt.png');
+        this.load.image('superPrompt', './assets/SuperPunchPrompt.png');
+
         // LOAD AUDIO
         this.load.audio('sfx_select_2', './assets/audio/selectSFX_2.wav');
         this.load.audio('tutorialBeat', './assets/audio/datTutorial.wav');
+        this.load.audio('menuBeat', './assets/audio/datTutorial.wav');
+        this.load.audio('playBeat', './assets/audio/datTutorial.wav');
         this.load.audio('sfx_punch', './assets/audio/punch.wav');
 
         // LOAD SPRITESHEETS

@@ -67,7 +67,7 @@ class Menu extends Phaser.Scene{
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.playButtonText.off('selected');
             this.tutorialButtonText.off('selected');
-        })
+        });
 
     }
 
