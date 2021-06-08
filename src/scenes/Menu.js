@@ -60,6 +60,7 @@ class Menu extends Phaser.Scene{
         });
 
         this.cameras.main.on("camerafadeoutcomplete", () => {
+            this.menuTheme.stop();
             this.scene.start('tutorialScene');
         });
         
@@ -68,6 +69,18 @@ class Menu extends Phaser.Scene{
             this.playButtonText.off('selected');
             this.tutorialButtonText.off('selected');
         });
+        
+        this.menuTheme = this.sound.add("menuBeat");
+        var musicConfig = {
+            mute: false,
+            //volume: 0.5,
+            rate: 1,
+            //detune: 2,
+            seek: 0,
+            loop: true,
+            delay: 0
+        }
+        this.menuTheme.play(musicConfig);
 
     }
 

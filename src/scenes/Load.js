@@ -56,12 +56,20 @@ class Load extends Phaser.Scene{
         this.load.image('punchPrompt', './assets/PunchPrompt.png');
         this.load.image('superPrompt', './assets/SuperPunchPrompt.png');
 
+        this.load.image('pentLayer1', "./assets/PenthousevLayer1.png");
+        this.load.image('pentLayer2', "./assets/PenthousevLayer2.png")
+
         // LOAD AUDIO
         this.load.audio('sfx_select_2', './assets/audio/selectSFX_2.wav');
         this.load.audio('tutorialBeat', './assets/audio/datTutorial.wav');
-        this.load.audio('menuBeat', './assets/audio/datTutorial.wav');
-        this.load.audio('playBeat', './assets/audio/datTutorial.wav');
+        this.load.audio('menuBeat', './assets/audio/titleScreenTypeBeat.wav');
+        this.load.audio('playBeat', './assets/audio/mainBeat.wav');
         this.load.audio('sfx_punch', './assets/audio/punch.wav');
+        this.load.audio('sfx_gameOver', './assets/audio/gameOver.wav');
+        this.load.audio('sfx_gettingHit', "./assets/audio/gettingHit.wav");
+        this.load.audio("enemyPunch1", './assets/audio/enemyPunch.wav');
+        this.load.audio('enemyPunch2', './assets/audio/enemyPunch2.wav');
+
 
         // LOAD SPRITESHEETS
         this.load.spritesheet('the_receptionist', "./assets/Enemies/receptionist.png", {

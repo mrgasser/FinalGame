@@ -350,6 +350,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
             //Play the anim
             this.scope.play('recepPunch');
+            this.scope.scene.sound.play('enemyPunch2');
 
             setTimeout( () => {
                 // checks which direction player is facing to spawn punch hitbox
