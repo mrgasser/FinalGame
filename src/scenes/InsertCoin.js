@@ -9,15 +9,18 @@ class InsertCoin extends Phaser.Scene{
         this.doOnce = true;
 
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
         this.skyline = this.add.image(game.config.width/2, game.config.height/2, 'skyline').setOrigin(0.5, 0.5).setAlpha(0);
         this.skyline.displayWidth = game.config.width;
         this.skyline.displayHeight = game.config.height;
 
+        this.clouds = this.add.tileSprite(0, 0, game.config.width, game.config.height,
+            'clouds').setOrigin(0,0).setAlpha(0);
+
         this.menuTitle = this.add.image(game.config.width/2, game.config.height/2, 'wallStreetFighter').setOrigin(0.5, 0.5);
         this.menuTitle.displayWidth = 600;
         this.menuTitle.displayHeight = 300;
-
         
 
         this.insertCoin = this.add.text(game.config.width/2, game.config.height/2 + game.config.height/2.5, "INSERT COIN", 'Lucida Sans Unicode').setOrigin(0.5, 0.5);
@@ -33,20 +36,20 @@ class InsertCoin extends Phaser.Scene{
         // TWEENS TO START THE SCENE
         this.moveTitle = this.tweens.add({
             targets: this.menuTitle,
-            y: 120,
-            x: 600,
-            scale: 2.5,
+            y: 130,
+            x: game.config.width/2,
+            scale: 3,
             duration: 3000,
             ease: 'Sine.easeInOut',
-            paused: true,
+            paused: true, 
             onComplete: () => {this.scene.start('menuScene')}
         });
 
         this.alphaSkyline = this.tweens.add({
-            targets: this.skyline,
+            targets: [this.clouds, this.skyline],
             alpha: 1,
             duration: 3000,
-            ease: 'Sine.easeInOut',
+            ease: 'Sine.easeIn',
             paused: true,
         });
 

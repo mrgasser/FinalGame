@@ -28,8 +28,17 @@ let game = new Phaser.Game(config);
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
+function loadFont(name, url) {
+    var newFont = new FontFace(name, `url(${url})`);
+    newFont.load().then(function (loaded) {
+        document.fonts.add(loaded);
+    }).catch(function (error) {
+        return error;
+    });
+}
+
 // Reserve Keys
-let keySPACE, keyR, keyO, keyP;
+let keySPACE, keyR, keyO, keyP, keyUP;
 let score = 0;
 
 let cursors;

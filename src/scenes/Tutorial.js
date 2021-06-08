@@ -10,13 +10,18 @@ class Tutorial extends Phaser.Scene{
         this.physics.world.enable(this.gameFloor);
         this.gameFloor.body.setImmovable();
 
+        // Define the key
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
+
         //Make the background
         this.lobbyBackground = this.add.image(0, 0, 'lobby').setOrigin(0,0);
         this.lobbyBackground.setDisplaySize(game.config.width, game.config.height);
 
         // Text for scene
         //this.cursors = this.input.keyboard.createCursorKeys();
-        this.add.text(1, 0, "Tutorial Scene");
+        //this.add.text(1, 0, "Tutorial Scene");
         //this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
         //this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
         this.playerState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
@@ -27,16 +32,13 @@ class Tutorial extends Phaser.Scene{
         this.upArrow = this.add.image(game.config.width/2 - 10, game.config.height/2 + 95, 'upArrow').setOrigin(0.5,0.5);
         this.upArrow.setAlpha(0);
 
+        // Make checkmarks
+
         this.arrowFlash = this.plugins.get('rexflashplugin').add(this.upArrow, {
             duration: 500,
             repeat: -1
         });
-
-        // Return to menu configuration
-        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-        keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
-        //this.add.text(game.config.width/2, 20, "Press R to return to Menu").setOrigin(0.5);
-
+    
         // Make Animations
         this.anims.create({
             key: 'recepIdle',
@@ -127,18 +129,34 @@ class Tutorial extends Phaser.Scene{
         }
         this.tutorialTheme.play(musicConfig);
 
+        // Change scene 
+        this.physics.add.overlap(this.upArrow, this.player, () => {
+
+            if(Phaser.Input.Keyboard.JustDown(keyUP)){
+                console.log("going up");
+                this.moveCam();
+            }
+
+        });
+
         // CAMERA STUFF
         this.cameras.main.fadeIn(1000);
-        this.cameras.main.setBounds(0, 0, game.config.width, game.config.height);
+        this.cameras.main.setBounds(0, 0, game.config.width, game.config.height, true);
         this.cameras.main.setZoom(1.1, 1.1);
         this.cameras.main.startFollow(this.player, false, 0.01, 0.01);
     }
 
     moveCam(){
-        this.cameras.main.pan(game.config.width/2, -game.config.height * 1.5, 5000, "Sine.easeIn");
+        this.player.destroy();
+        this.cameras.main.stopFollow();
+        this.cameras.main.removeBounds();
+
+        this.cameras.main.pan(this.cameras.main.centerX, game.config.height * -1.5, 5000, "Linear");
         this.cameras.main.on("camerapancomplete", () => {
             console.log("DONE");
-        })
+            this.tutorialTheme.stop();
+            this.scene.start('playScene');
+        });
     }
 
     update() {
@@ -153,11 +171,12 @@ class Tutorial extends Phaser.Scene{
             //this.facing.setText('Enemy: ' + this.enemy.body.facing);
             //this.facingPlayer.setText('Player: ' + this.player.body.facing);
             //this.playerState.setText(this.player.currState());
-            this.enemyState.setText(this.enemy.currState());
+            //this.enemyState.setText(this.enemy.currState());
         }
 
-
-        this.player.update(this);
+        if(this.player.body){
+            this.player.update(this);
+        }
 
         if(this.enemy){
             this.enemy.update(this, this.player);
