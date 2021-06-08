@@ -41,12 +41,16 @@ class Load extends Phaser.Scene{
         // PLUGINS
         this.load.plugin('rexflashplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexflashplugin.min.js', true);
 
+        // LOAD FONT
+        loadFont("mainFont", "./assets/fonts/mainFont.ttf");
+
         // LOAD IMAGES
         this.load.image('wallStreetFighter', './assets/images/menuTitle.png');
-        this.load.image('skyline', './assets/images/skyline.png');
-        this.load.image('lobby', './assets/HotelLobbyv1.png');
+        this.load.image('skyline', './assets/images/MenuBackground.png');
+        this.load.image('lobby', './assets/images/HotelLobbyv1.png');
         this.load.image('checkmark', './assets/checkMark.png');
         this.load.image('upArrow', './assets/upArrow.png');
+        this.load.image('clouds', './assets/images/CloudsParallax.png');
 
         // LOAD AUDIO
         this.load.audio('sfx_select_2', './assets/audio/selectSFX_2.wav');
