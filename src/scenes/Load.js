@@ -38,10 +38,11 @@ class Load extends Phaser.Scene{
             this.scene.start('coinScene');
         });
 
+        // LOAD FONT
+        loadFont("mainFont", "./assets/fonts/mainFont.ttf");
+
         // PLUGINS
         this.load.plugin('rexflashplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexflashplugin.min.js', true);
-
-        
 
         // LOAD IMAGES
         this.load.image('wallStreetFighter', './assets/images/menuTitle.png');
@@ -71,10 +72,6 @@ class Load extends Phaser.Scene{
         this.load.audio("enemyPunch1", './assets/audio/enemyPunch.wav');
         this.load.audio('enemyPunch2', './assets/audio/enemyPunch2.wav');
         this.load.audio('coinSound', './assets/audio/coinSound.wav');
-
-        // LOAD FONT
-        loadFont("mainFont", "./assets/fonts/mainFont.ttf");
-
 
         // LOAD SPRITESHEETS
         this.load.spritesheet('the_receptionist', "./assets/Enemies/receptionist.png", {
