@@ -105,6 +105,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if(this.power >= 5){
             this.usePunch(this.scene, 400, this.powerfulPunch);
             this.y -= 1;
+            this.emit('powerPunch');
         }
         // FASTER PUNCH
         else if(this.clickDelay < 250){
