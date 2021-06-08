@@ -72,6 +72,45 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
                 onDie: this._onDie,
             }
           });
+
+        // Make Animations
+        this.anims.create({
+            key: 'recepIdle',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 0, end: 7}),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'recepStun',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 8, end: 11}),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'recepKnocked',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 12, end: 13}),
+            frameRate: 2,
+        });
+
+        this.anims.create({
+            key: 'recepLaydown',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 18, end:18}),
+        });
+
+        this.anims.create({
+            key: 'recepWalk',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 26, end: 29}),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'recepPunch',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 19, end: 25}),
+            frameRate: 30,
+        });
                 
         //collisions
         scene.physics.add.overlap(scene.hitboxes, this, this.enemyStun.bind(this), null);

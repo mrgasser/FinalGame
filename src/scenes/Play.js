@@ -29,34 +29,6 @@ class Play extends Phaser.Scene{
         keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
         this.add.text(game.config.width/2, 20, "Press R to return to Menu").setOrigin(0.5);
 
-        // Make Animations
-        this.anims.create({
-            key: 'recepIdle',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 0, end: 7}),
-            frameRate: 15,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'recepStun',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 8, end: 11}),
-            frameRate: 15,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'recepKnocked',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 12, end: 13}),
-            frameRate: 2,
-            //repeat: -1
-        });
-
-        this.anims.create({
-            key: 'recepLaydown',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 18}),
-            //frameRate: 10,
-            //repeat: -1
-        });
 
         // Initialize all the different groups
         this.hitboxes = this.physics.add.group();
@@ -73,8 +45,8 @@ class Play extends Phaser.Scene{
 
         // Initialize the prefabs in the scene
         this.player = new Player(this, game.config.width/3, game.config.height - 100, 120, 35, 'main_player');
-        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
-        this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
+        //this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
+        //this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         
         this.gameOver = false;
         
@@ -91,18 +63,20 @@ class Play extends Phaser.Scene{
         this.cameras.main.setZoom(1.1, 1.1);
         this.cameras.main.startFollow(this.player, false, 0.01, 0.01);
 
-        // this.enemyAmount = 3;
-        // this.enemyGroupTest = this.add.group(this.enemy, {
-        //     classType: Enemy,
-        //     //repeat: this.enemyAmount - 1,
-        //     setXY: { x: 25, y: 60},
-        //     runChildUpdate: true,
-        //     active: true,
-        //     maxSize: 2
-        // });
-
-        // this.wave = 1;
-
+        this.enemyObjects = this.add.group();
+        this.enemyObjects.createMultiple({
+            classType: Enemy,
+            key: 'the_receptionist',
+            //runChildUpdate: true,
+            repeat: -1,
+            maxSize: 3,
+            setXY: {
+                x:100,
+                y:100,
+                stepX:0,
+                stepY:0
+            },
+        })
     }
 
     moveCam(){
@@ -126,8 +100,8 @@ class Play extends Phaser.Scene{
         }
 
         this.player.update(this);
-        this.enemy.update(this, this.player);
-        this.enemy2.update(this, this.player);
+        //this.enemy.update(this, this.player);
+        //this.enemy2.update(this, this.player);
 
         if (this.player.healthBar.health == 0) {
             this.gameOver = true;
