@@ -19,19 +19,29 @@ class Tutorial extends Phaser.Scene{
         this.lobbyBackground = this.add.image(0, 0, 'lobby').setOrigin(0,0);
         this.lobbyBackground.setDisplaySize(game.config.width, game.config.height);
 
+        // Text for scene
+
+        let config = {
+            fontFamily: 'mainFont',
+            fontSize: '15px',
+            //color: '#000000',
+            // padding: {
+            // top: 5,
+            // bottom: 5,
+            // }
+        }
+        this.scoreText = this.add.text(44, 55, "Score:     ", config).setOrigin(0,0);
+        this.scoreText.setScrollFactor(0);
+        this.scoreTextValue = this.add.text(120, 55, "0", config).setOrigin(0,0);
+        this.scoreTextValue.setScrollFactor(0);
+
+        this.healthText = this.add.text(44, 35, "Health: ", config).setOrigin(0, 0);
+        this.healthText.setScrollFactor(0);
+
         // Make the prompts
         this.walkPrompt = this.add.image(game.config.width/4, game.config.height/4, 'walkPrompt').setOrigin(0,0);
         this.punchPrompt = this.add.image(game.config.width * (2/4), game.config.height/4, 'punchPrompt').setOrigin(0,0);
         this.superPrompt = this.add.image(game.config.width * (3/4), game.config.height/4, 'superPrompt').setOrigin(0,0);
-
-        // Text for scene
-        //this.cursors = this.input.keyboard.createCursorKeys();
-        //this.add.text(1, 0, "Tutorial Scene");
-        //this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
-        //this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
-        this.playerState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
-        this.enemyState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
-        //this.punched = this.add.text(game.config.width/2, game.config.height/2, 'Arrow keys to move \n Space to punch \n Hold Space for powerful punch', { font: '16px Courier', fill: '#ffffff', align: 'center' }).setOrigin(0.5);
         
         // Make UI Stuff
         this.upArrow = this.add.image(game.config.width/2 - 10, game.config.height/2 + 95, 'upArrow').setOrigin(0.5,0.5);

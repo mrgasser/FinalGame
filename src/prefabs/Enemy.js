@@ -127,7 +127,16 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             repeat: 5
         });
 
-        
+        this.enemyPuchSFX = scene.sound.add("enemyPunch2");
+        this.musicConfig = {
+            mute: false,
+            volume: 0.5,
+            rate: 1,
+            //detune: 2,
+            seek: 0,
+            loop: false,
+            delay: 0
+        }
     }
 
     _onDie(){
@@ -352,7 +361,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
             //Play the anim
             this.scope.play('recepPunch');
-            this.scope.scene.sound.play('enemyPunch2');
+
+            this.scope.enemyPuchSFX.play(this.scope.musicConfig);
 
             setTimeout( () => {
                 // checks which direction player is facing to spawn punch hitbox
