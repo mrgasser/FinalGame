@@ -41,8 +41,7 @@ class Load extends Phaser.Scene{
         // PLUGINS
         this.load.plugin('rexflashplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexflashplugin.min.js', true);
 
-        // LOAD FONT
-        loadFont("mainFont", "./assets/fonts/mainFont.ttf");
+        
 
         // LOAD IMAGES
         this.load.image('wallStreetFighter', './assets/images/menuTitle.png');
@@ -71,6 +70,9 @@ class Load extends Phaser.Scene{
         this.load.audio('sfx_gettingHit', "./assets/audio/gettingHit.wav");
         this.load.audio("enemyPunch1", './assets/audio/enemyPunch.wav');
         this.load.audio('enemyPunch2', './assets/audio/enemyPunch2.wav');
+
+        // LOAD FONT
+        loadFont("mainFont", "./assets/fonts/mainFont.ttf");
 
 
         // LOAD SPRITESHEETS
