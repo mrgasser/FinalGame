@@ -9,6 +9,13 @@ class Play extends Phaser.Scene{
         this.physics.world.enable(this.gameFloor);
         this.gameFloor.body.setImmovable();
 
+        // Make the background
+        this.playBackground = this.add.image(0, 0, 'pentLayer1').setOrigin(0,0);
+        this.playBackground.setDisplaySize(game.config.width, game.config.height);
+
+        this.playBackground2 = this.add.image(0, 0, 'pentLayer2').setOrigin(0,0);
+        this.playBackground2.setDisplaySize(game.config.width, game.config.height);
+
         // Text for scene
         this.scoreText = this.add.text(44, 55, "Score:").setOrigin(0,0);
         this.scoreText.setScrollFactor(0);
@@ -73,14 +80,16 @@ class Play extends Phaser.Scene{
         this.enemyHitboxes = this.physics.add.group();
         this.physics.world.enable(this.enemyHitboxes);
 
-        this.enemyGroup = this.physics.add.group();
+        this.enemyGroup = this.add.group();
         this.physics.world.enable(this.enemyHitboxes);
 
         // Initialize the prefabs in the scene
         this.player = new Player(this, game.config.width/3, game.config.height - 100, 120, 35, 'main_player');
-        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
-        this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
-
+        this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height - 100, 'the_receptionist');
+        this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height - 100, 'the_receptionist');
+        this.enemyGroup.add(this.enemy);
+        this.enemyGroup.add(this.enemy2);
+    
         // game over bools
         this.gameOver = false;
         this.end = true;

@@ -56,6 +56,9 @@ class Load extends Phaser.Scene{
         this.load.image('punchPrompt', './assets/PunchPrompt.png');
         this.load.image('superPrompt', './assets/SuperPunchPrompt.png');
 
+        this.load.image('pentLayer1', "./assets/PenthousevLayer1.png");
+        this.load.image('pentLayer2', "./assets/PenthousevLayer2.png")
+
         // LOAD AUDIO
         this.load.audio('sfx_select_2', './assets/audio/selectSFX_2.wav');
         this.load.audio('tutorialBeat', './assets/audio/datTutorial.wav');
