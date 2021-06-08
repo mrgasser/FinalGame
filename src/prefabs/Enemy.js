@@ -346,6 +346,8 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
         this.scene.physics.add.existing(this.punch);
 
+        this.scene.enemyHitboxes.add(this.punch);
+
         // if(type.hitbox == 'regular'){
         //     this.scene.hitboxes.add(this.punch);
         // }
@@ -358,31 +360,4 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         return "is-" + this.fsm.state;
     }
 
-    // setHealthBar() {
-    //     this.healthBar.clear();
-    //     console.log("Setting healthbar");
-        
-    //     this.healthBar.fillStyle(0xFFFFFF);
-    //     this.healthBar.fillRect(this.x, this.y, 70, 20);
-
-    //     if (this.health < 20) {
-    //         this.healthBar.fillStyle(0xFF0000);
-    //     } else {
-    //         this.healthBar.fillStyle(0x00FF00);
-    //     }
-
-    //     let i = Math.floor(76/100 * this.health);
-
-    //     this.healthBar.fillRect(this.x, this.y, i, 20);
-    // }
-
-    // decreaseHealth(num) {
-    //     this.health -= num;
-
-    //     if (this.health < 0) {
-    //         this.health = 0;
-    //     }
-
-    //     this.setHealthBar();
-    // }
 }

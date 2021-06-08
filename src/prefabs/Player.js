@@ -80,7 +80,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.lastTime = 0;
         scene.input.keyboard.on('keydown-SPACE', this.startPunch.bind(this));
         scene.input.keyboard.on('keyup-SPACE', this.endPunch.bind(this));
+
+        scene.physics.add.overlap(scene.enemyHitboxes, this, this.playerDamaged.bind(this), null);
         
+        this.flash = scene.plugins.get('rexflashplugin').add(this, {
+            duration: 200,
+            repeat: 3
+        });
     }
 
     endPunch(){
@@ -225,4 +231,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         
     }
 
+    playerDamaged () {
+
+        return new Promise( async (resolve, reject) => {
+            if(!this.hasOverlapped) { 
+                this.healthBar.decrease(20);
+                this.hasOverlapped = true;
+                // flash player
+                this.flash.flash();
+            }
+            setTimeout( () => {
+                // stop flashing
+                this.hasOverlapped = false;
+            }, 300);
+        });   
+    }
 }

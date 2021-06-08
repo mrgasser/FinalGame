@@ -72,6 +72,7 @@ class Play extends Phaser.Scene{
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         
+
         //this.leftSide = this.add.circle(this.player.x, this.player.y, 30, 30, 0xFFFFFF);
         //this.rightSide = this.add.circle(this.player.x, this.player.y, 30, 30, 0xFFFFFF);
         
@@ -82,11 +83,16 @@ class Play extends Phaser.Scene{
         // Scene Camera Test
         this.input.keyboard.on('keydown-O', this.moveCam.bind(this));
 
-        // this.enemyAmount = 3;
-        // this.enemyGroupTest = this.physics.add.group({
-        //     key: "enemy",
-        //     repeat: this.enemyAmount - 1,
-        // })
+        this.enemyAmount = 3;
+        this.enemyGroupTest = this.physics.add.group(this.enemy, {
+            classType: Enemy,
+            //repeat: this.enemyAmount - 1,
+            setXY: { x: 25, y: 60},
+            runChildUpdate: true,
+            active: true,
+            maxSize: 2
+        });
+
         this.wave = 1;
 
     }
@@ -108,17 +114,19 @@ class Play extends Phaser.Scene{
             // this.facing.setText('Enemy: ' + this.enemy.body.facing);
             // this.facingPlayer.setText('Player: ' + this.player.body.facing);
             // this.playerState.setText(this.player.currState());
-            this.enemyState.setText(this.enemy.currState());
+            //this.enemyState.setText(this.enemy.currState());
         }
 
         this.player.update(this);
-        if (this.wave = 1) {
-            this.enemy.update(this, this.player);
-            this.enemy2.update(this, this.player);
-            if (this.enemy.currState == "die") {
-                console.log("enemies dead");
-            }
-        }
+        this.enemy.update(this, this.player);
+        this.enemy2.update(this, this.player);
+        // if (this.wave = 1) {
+        //     this.enemy.update(this, this.player);
+        //     this.enemy2.update(this, this.player);
+        //     if (this.enemy.currState == "die") {
+        //         console.log("enemies dead");
+        //     }
+        // }
 
         // go to menu scene
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
