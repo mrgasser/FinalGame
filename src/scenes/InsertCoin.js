@@ -53,12 +53,23 @@ class InsertCoin extends Phaser.Scene{
             paused: true,
         });
 
+        this.coinSFX = this.sound.add("coinSound");
+        this.musicConfig = {
+            mute: false,
+            volume: 0.5,
+            rate: 1,
+            //detune: 2,
+            seek: 0,
+            loop: false,
+            delay: 0
+        }
     }
 
 
     update() {
 
         if(this.insertedCoin && this.doOnce){
+            this.coinSFX.play(this.musicConfig);
             this.doOnce = false;
             this.flash.stop();
             this.insertCoin.destroy();

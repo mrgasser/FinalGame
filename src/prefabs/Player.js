@@ -90,6 +90,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             duration: 200,
             repeat: 3
         });
+
+        this.playerGrunt = scene.sound.add("sfx_gettingHit");
+        this.musicConfig = {
+            mute: false,
+            volume: 0.5,
+            rate: 1,
+            //detune: 2,
+            seek: 0,
+            loop: false,
+            delay: 0
+        }
     }
 
     endPunch(){
@@ -237,7 +248,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         return new Promise( async (resolve, reject) => {
             if(!this.hasOverlapped) { 
-                this.scene.sound.play('sfx_gettingHit');
+                this.playerGrunt.play(this.musicConfig);
                 this.healthBar.decrease(20);
                 this.hasOverlapped = true;
                 // flash player

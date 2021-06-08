@@ -17,7 +17,7 @@ class Play extends Phaser.Scene{
         this.playBackground2.setDisplaySize(game.config.width, game.config.height);
 
 
-        let config = {
+        this.config = {
             fontFamily: 'mainFont',
             fontSize: '15px',
             //color: '#000000',
@@ -28,12 +28,12 @@ class Play extends Phaser.Scene{
         }
 
         // Text for scene
-        this.scoreText = this.add.text(44, 55, "Score:     ", config).setOrigin(0,0);
+        this.scoreText = this.add.text(44, 55, "Score:     ", this.config).setOrigin(0,0);
         this.scoreText.setScrollFactor(0);
-        this.scoreTextValue = this.add.text(120, 55, "0", config).setOrigin(0,0);
+        this.scoreTextValue = this.add.text(120, 55, "0", this.config).setOrigin(0,0);
         this.scoreTextValue.setScrollFactor(0);
 
-        this.healthText = this.add.text(44, 35, "Health: ", config).setOrigin(0, 0);
+        this.healthText = this.add.text(44, 35, "Health: ", this.config).setOrigin(0, 0);
         this.healthText.setScrollFactor(0);
 
         // this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
@@ -67,7 +67,7 @@ class Play extends Phaser.Scene{
         this.physics.world.enable(this.enemyHitboxes);
 
         // Initialize the prefabs in the scene
-        this.player = new Player(this, game.config.width/2, game.config.height - 100, 120, 35, 'main_player');
+        this.player = new Player(this, game.config.width/2, game.config.height - 100, 130, 35, 'main_player');
 // <<<<<<< songs-and-tutorial-prompts
 //         //this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
 //         //this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
@@ -216,6 +216,7 @@ class Play extends Phaser.Scene{
         // go to menu scene
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.sound.play('sfx_select_2');
+            score = 0;
             this.scene.start('menuScene');
         }
 
@@ -228,9 +229,9 @@ class Play extends Phaser.Scene{
         this.sound.play('sfx_gameOver');
         this.gameOver = true;
         this.end = false;
-        this.add.text(game.config.width/2, game.config.height/2 - 40, "GAME OVER").setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2 - 20, "Final Score: " + score).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2, "Press R to return to Menu").setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - 40, "GAME OVER", this.config).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 - 20, "Final Score: " + score, this.config).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2, "Press R to return to Menu", this.config).setOrigin(0.5);
         // add animation
         this.player.destroy();
         // game.scene.pause('playScene');
