@@ -71,6 +71,7 @@ class Load extends Phaser.Scene{
         this.load.audio('sfx_gettingHit', "./assets/audio/gettingHit.wav");
         this.load.audio("enemyPunch1", './assets/audio/enemyPunch.wav');
         this.load.audio('enemyPunch2', './assets/audio/enemyPunch2.wav');
+        this.load.audio('coinSound', './assets/audio/coinSound.wav');
 
 
         // LOAD SPRITESHEETS

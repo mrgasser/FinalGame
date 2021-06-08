@@ -236,7 +236,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     _onStunned(){
         console.log("onStunned");
-        this.scope.patrolPlayer.stop();
+        if (this.scope.patrolPlayer) {
+            this.scope.patrolPlayer.stop();
+        }
         this.scope.idleCountdown.stop();
         
         
@@ -247,7 +249,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     _onEnterKnocked(){
-        this.scope.patrolPlayer.stop();
+        if (this.scope.patrolPlayer) {
+            this.scope.patrolPlayer.stop();
+        }
         if(this.scope.playerLooking == 'right'){
             this.scope.setBounce(0.8,0.8);
             this.scope.body.velocity.x = 300;
