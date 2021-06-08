@@ -239,6 +239,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         return new Promise( async (resolve, reject) => {
             if(!this.hasOverlapped) { 
+                this.scene.sound.play('sfx_gettingHit');
                 this.healthBar.decrease(20);
                 this.hasOverlapped = true;
                 // flash player

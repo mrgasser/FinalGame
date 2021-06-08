@@ -98,6 +98,18 @@ class Play extends Phaser.Scene{
         this.cameras.main.setZoom(1.1, 1.1);
         this.cameras.main.startFollow(this.player, false, 0.01, 0.01);
 
+        this.playTheme = this.sound.add("playBeat");
+        var musicConfig = {
+            mute: false,
+            volume: 0.5,
+            rate: 1,
+            //detune: 2,
+            seek: 0,
+            loop: true,
+            delay: 0
+        }
+        this.playTheme.play(musicConfig);
+
         // this.enemyAmount = 3;
         // this.enemyGroupTest = this.add.group(this.enemy, {
         //     classType: Enemy,
@@ -153,6 +165,8 @@ class Play extends Phaser.Scene{
     }
 
     gameOverFucn() {
+        this.playTheme.stop();
+        this.sound.play('sfx_gameOver');
         this.gameOver = true;
         this.end = false;
         this.add.text(game.config.width/2, game.config.height/2 - 40, "GAME OVER").setOrigin(0.5);
