@@ -10,10 +10,14 @@ class Play extends Phaser.Scene{
         this.gameFloor.body.setImmovable();
 
         // Text for scene
-        //this.cursors = this.input.keyboard.createCursorKeys();
-        this.add.text(1, 20, "Score:");
-        this.scoreText = this.add.text(60, 20, "0");
-        this.add.text(1, 5, "Health:");
+        this.scoreText = this.add.text(44, 55, "Score:").setOrigin(0,0);
+        this.scoreText.setScrollFactor(0);
+        this.scoreTextValue = this.add.text(110, 55, "0").setOrigin(0,0);
+        this.scoreTextValue.setScrollFactor(0);
+
+        this.healthText = this.add.text(44, 35, "Health:").setOrigin(0, 0);
+        this.healthText.setScrollFactor(0);
+
         this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
         this.facingPlayer = this.add.text(0, 30, '', { font: '16px Courier', fill: '#00ff00' });
         this.playerState = this.add.text(0, 45, '', { font: '16px Courier', fill: '#00ff00' });
@@ -68,13 +72,11 @@ class Play extends Phaser.Scene{
         this.physics.world.enable(this.enemyHitboxes);
 
         // Initialize the prefabs in the scene
-        this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
+        this.player = new Player(this, game.config.width/3, game.config.height - 100, 120, 35, 'main_player');
         this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
         
-
-        //this.leftSide = this.add.circle(this.player.x, this.player.y, 30, 30, 0xFFFFFF);
-        //this.rightSide = this.add.circle(this.player.x, this.player.y, 30, 30, 0xFFFFFF);
+        this.gameOver = false;
         
         // Physics Collisions
         this.physics.add.collider(this.enemyGroup, this.gameFloor);
@@ -83,17 +85,23 @@ class Play extends Phaser.Scene{
         // Scene Camera Test
         this.input.keyboard.on('keydown-O', this.moveCam.bind(this));
 
-        this.enemyAmount = 3;
-        this.enemyGroupTest = this.physics.add.group(this.enemy, {
-            classType: Enemy,
-            //repeat: this.enemyAmount - 1,
-            setXY: { x: 25, y: 60},
-            runChildUpdate: true,
-            active: true,
-            maxSize: 2
-        });
+        // CAMERA STUFF
+        this.cameras.main.fadeIn(1000);
+        this.cameras.main.setBounds(0, 0, game.config.width, game.config.height, true);
+        this.cameras.main.setZoom(1.1, 1.1);
+        this.cameras.main.startFollow(this.player, false, 0.01, 0.01);
 
-        this.wave = 1;
+        // this.enemyAmount = 3;
+        // this.enemyGroupTest = this.add.group(this.enemy, {
+        //     classType: Enemy,
+        //     //repeat: this.enemyAmount - 1,
+        //     setXY: { x: 25, y: 60},
+        //     runChildUpdate: true,
+        //     active: true,
+        //     maxSize: 2
+        // });
+
+        // this.wave = 1;
 
     }
 
@@ -120,13 +128,10 @@ class Play extends Phaser.Scene{
         this.player.update(this);
         this.enemy.update(this, this.player);
         this.enemy2.update(this, this.player);
-        // if (this.wave = 1) {
-        //     this.enemy.update(this, this.player);
-        //     this.enemy2.update(this, this.player);
-        //     if (this.enemy.currState == "die") {
-        //         console.log("enemies dead");
-        //     }
-        // }
+
+        if (this.player.healthBar.health == 0) {
+            this.gameOver = true;
+        }
 
         // go to menu scene
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
@@ -135,6 +140,6 @@ class Play extends Phaser.Scene{
         }
 
         // update score
-        this.scoreText.text = score;
+        this.scoreTextValue.text = score;
     }
 }

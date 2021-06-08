@@ -1,5 +1,5 @@
 class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, frame) {
+    constructor(scene, x, y, healthX, healthY, texture, frame) {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -18,7 +18,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.looking = 'right';
 
         // Health bar stuff
-        this.healthBar = new HealthBar(scene, scene.cameras.main.centerX/4.8, scene.cameras.main.centerY/8);
+        this.healthBar = new HealthBar(scene, healthX, healthY);
         this.healthBar.bar.setScrollFactor(0);
 
         // Physics Variables

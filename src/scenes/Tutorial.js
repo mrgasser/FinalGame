@@ -107,7 +107,8 @@ class Tutorial extends Phaser.Scene{
         });
 
         // Initialize the prefabs in the scene
-        this.player = new Player(this, game.config.width/3, game.config.height - 100, 'main_player');
+        this.player = new Player(this, game.config.width/3, game.config.height - 100,
+        this.cameras.main.centerX/4.8, this.cameras.main.centerY/8, 'main_player');
 
         // Physics Collisions
         this.physics.add.collider(this.enemyGroup, this.gameFloor);
