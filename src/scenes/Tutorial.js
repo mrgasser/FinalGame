@@ -161,7 +161,7 @@ class Tutorial extends Phaser.Scene{
         }
 
         if(this.enemy){
-            this.enemy.update(this, this.player);
+            this.enemy.update(this.player);
         }
         
         // go to menu scene

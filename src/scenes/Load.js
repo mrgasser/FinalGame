@@ -52,6 +52,8 @@ class Load extends Phaser.Scene{
         this.load.image('upArrow', './assets/upArrow.png');
         this.load.image('clouds', './assets/images/CloudsParallax.png');
 
+        this.load.image('credits', './assets/Credits.png');
+
         this.load.image('walkPrompt', './assets/walkPrompt.png');
         this.load.image('punchPrompt', './assets/PunchPrompt.png');
         this.load.image('superPrompt', './assets/SuperPunchPrompt.png');

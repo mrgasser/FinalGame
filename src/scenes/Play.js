@@ -16,13 +16,24 @@ class Play extends Phaser.Scene{
         this.playBackground2 = this.add.image(0, 0, 'pentLayer2').setOrigin(0,0);
         this.playBackground2.setDisplaySize(game.config.width, game.config.height);
 
+
+        let config = {
+            fontFamily: 'mainFont',
+            fontSize: '15px',
+            //color: '#000000',
+            // padding: {
+            // top: 5,
+            // bottom: 5,
+            // }
+        }
+
         // Text for scene
-        this.scoreText = this.add.text(44, 55, "Score:").setOrigin(0,0);
+        this.scoreText = this.add.text(44, 55, "Score:     ", config).setOrigin(0,0);
         this.scoreText.setScrollFactor(0);
-        this.scoreTextValue = this.add.text(110, 55, "0").setOrigin(0,0);
+        this.scoreTextValue = this.add.text(120, 55, "0", config).setOrigin(0,0);
         this.scoreTextValue.setScrollFactor(0);
 
-        this.healthText = this.add.text(44, 35, "Health:").setOrigin(0, 0);
+        this.healthText = this.add.text(44, 35, "Health: ", config).setOrigin(0, 0);
         this.healthText.setScrollFactor(0);
 
         // this.facing = this.add.text(0, 15, '', { font: '16px Courier', fill: '#00ff00' });
@@ -56,7 +67,7 @@ class Play extends Phaser.Scene{
         this.physics.world.enable(this.enemyHitboxes);
 
         // Initialize the prefabs in the scene
-        this.player = new Player(this, game.config.width/3, game.config.height - 100, 120, 35, 'main_player');
+        this.player = new Player(this, game.config.width/2, game.config.height - 100, 120, 35, 'main_player');
 // <<<<<<< songs-and-tutorial-prompts
 //         //this.enemy = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
 //         //this.enemy2 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist');
@@ -73,7 +84,6 @@ class Play extends Phaser.Scene{
         this.end = true;
         
         // Physics Collisions
-        this.physics.add.collider(this.enemyGroup, this.gameFloor);
         this.physics.add.collider(this.player, this.gameFloor);
 
         // Scene Camera Test
@@ -85,20 +95,64 @@ class Play extends Phaser.Scene{
         this.cameras.main.setZoom(1.1, 1.1);
         this.cameras.main.startFollow(this.player, false, 0.01, 0.01);
 
+        // SPAWNING IN MANY ENEMIES
         this.enemyObjects = this.add.group();
         this.enemyObjects.createMultiple({
             classType: Enemy,
             key: 'the_receptionist',
-            //runChildUpdate: true,
-            repeat: -1,
-            maxSize: 3,
-            setXY: {
-                x:100,
-                y:100,
-                stepX:0,
-                stepY:0
+            removeCallback: () => {
+                console.log("ONE DIED");
+                this.enemyObjects.getFirstDead(true, 110, 400, 'the_receptionist');
             },
-        })
+            setScale: {
+                x:3,
+                y:3,
+            },
+            //frame: 'the_receptionist',
+            quantity: 2,
+            setXY: {
+                x:110,
+                y:400,
+            },
+            runChildUpdate: true,
+        });
+
+        this.enemyObjects2 = this.add.group();
+        this.enemyObjects2.createMultiple({
+            classType: Enemy,
+            key: 'the_receptionist',
+            removeCallback: () => {
+                console.log("ONE DIED");
+                this.enemyObjects2.getFirstDead(true, 730, 400, 'the_receptionist');
+            },
+            setScale: {
+                x:3,
+                y:3,
+            },
+            //frame: 'the_receptionist',
+            quantity: 2,
+            setXY: {
+                x:730,
+                y:400,
+            },
+            runChildUpdate: true,
+        });
+
+        // this.enemyTimerOne = this.time.addEvent({
+        //     delay: 10000,                // ms
+        //     callback: () => {
+        //         this.enemy1 = new Enemy(this,game.config.width - game.config.width/3, game.config.height - 100, 'the_receptionist');
+        //     },
+        //     //args: [],
+        //     //callbackScope: thisArg,
+        //     loop: true
+        // });
+
+        
+
+        //this.physics.add.collider(this.enemyObjects, this.gameFloor);
+
+
         this.playTheme = this.sound.add("playBeat");
         var musicConfig = {
             mute: false,
@@ -111,17 +165,9 @@ class Play extends Phaser.Scene{
         }
         this.playTheme.play(musicConfig);
 
-        // this.enemyAmount = 3;
-        // this.enemyGroupTest = this.add.group(this.enemy, {
-        //     classType: Enemy,
-        //     //repeat: this.enemyAmount - 1,
-        //     setXY: { x: 25, y: 60},
-        //     runChildUpdate: true,
-        //     active: true,
-        //     maxSize: 2
+        // this.enemy1.on("destroy", () => {
+        //     this.enemy1 = new Enemy(this,game.config.width - game.config.width/3, game.config.height/2, 'the_receptionist'); 
         // });
-
-        // this.wave = 1;
 
     }
 
@@ -145,6 +191,14 @@ class Play extends Phaser.Scene{
             //this.enemyState.setText(this.enemy.currState());
         }
 
+        this.enemyObjects.getFirstNth(1, true, false).update(this.player);
+        this.enemyObjects.getFirstNth(2, true, false).update(this.player);
+        this.enemyObjects.getFirstNth(3, true, false).update(this.player);
+
+        this.enemyObjects2.getFirstNth(1, true, false).update(this.player);
+        this.enemyObjects2.getFirstNth(2, true, false).update(this.player);
+        this.enemyObjects2.getFirstNth(3, true, false).update(this.player);
+
         //this.player.update(this);
         //this.enemy.update(this, this.player);
         //this.enemy2.update(this, this.player);
@@ -152,8 +206,8 @@ class Play extends Phaser.Scene{
         if (this.end) {
             this.player.update(this);
         }
-        //this.enemy.update(this, this.player);
-        //this.enemy2.update(this, this.player);
+
+        play_Player = this.player;
 
         if (this.end && this.player.healthBar.health == 0) {
             this.gameOverFucn();

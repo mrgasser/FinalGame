@@ -19,10 +19,12 @@ let config = {
     },
     autoCenter: true,
     
-    scene: [Load, InsertCoin, Tutorial, Menu, Play]
+    scene: [Load, InsertCoin, Tutorial, Menu, Credits, Play]
 }
 
 let game = new Phaser.Game(config);
+
+let play_Player;
 
 // set the UI sizes
 let borderUISize = game.config.height / 15;

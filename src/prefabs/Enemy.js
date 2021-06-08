@@ -34,6 +34,45 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         // Enemy health Bar
         //this.healthBar = scene.add.rectangle(this.body.x, this.body.y - 40, 50, 10, 0x5be817).setOrigin(0, 0);
         this.healthBar = new HealthBar(scene, this.body.x, this.body.y);
+
+        // Make Animations
+        scene.anims.create({
+            key: 'recepIdle',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 0, end: 7}),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        scene.anims.create({
+            key: 'recepStun',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 8, end: 11}),
+            frameRate: 15,
+            repeat: -1
+        });
+
+        scene.anims.create({
+            key: 'recepKnocked',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 12, end: 13}),
+            frameRate: 2,
+        });
+
+        scene.anims.create({
+            key: 'recepLaydown',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 18, end:18}),
+        });
+
+        scene.anims.create({
+            key: 'recepWalk',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 26, end: 29}),
+            frameRate: 8,
+            repeat: -1
+        });
+
+        scene.anims.create({
+            key: 'recepPunch',
+            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 19, end: 25}),
+            frameRate: 30,
+        });
         
         // this.setHealthBar();
         // scene.add.existing(this.healthBar);
@@ -73,44 +112,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
             }
           });
 
-        // Make Animations
-        this.anims.create({
-            key: 'recepIdle',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 0, end: 7}),
-            frameRate: 15,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'recepStun',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 8, end: 11}),
-            frameRate: 15,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'recepKnocked',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 12, end: 13}),
-            frameRate: 2,
-        });
-
-        this.anims.create({
-            key: 'recepLaydown',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 18, end:18}),
-        });
-
-        this.anims.create({
-            key: 'recepWalk',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 26, end: 29}),
-            frameRate: 8,
-            repeat: -1
-        });
-
-        this.anims.create({
-            key: 'recepPunch',
-            frames: this.anims.generateFrameNumbers('the_receptionist', {start: 19, end: 25}),
-            frameRate: 30,
-        });
+        
                 
         //collisions
         scene.physics.add.overlap(scene.hitboxes, this, this.enemyStun.bind(this), null);
@@ -282,7 +284,7 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    update(scene, player){
+    update(player){
         if((this.x - player.x) < 0){
             this.enemyLooking = "right";
             this.setFlip(true, false);

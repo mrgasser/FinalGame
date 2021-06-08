@@ -56,7 +56,7 @@ class Menu extends Phaser.Scene{
         });
 
         this.tutorialButtonText.on('selected', () => {
-            console.log('tutorial')
+            this.scene.start('credits');
         });
 
         this.cameras.main.on("camerafadeoutcomplete", () => {
@@ -69,8 +69,7 @@ class Menu extends Phaser.Scene{
             this.playButtonText.off('selected');
             this.tutorialButtonText.off('selected');
         });
-        
-        this.menuTheme = this.sound.add("menuBeat");
+
         var musicConfig = {
             mute: false,
             //volume: 0.5,
@@ -80,8 +79,16 @@ class Menu extends Phaser.Scene{
             loop: true,
             delay: 0
         }
-        this.menuTheme.play(musicConfig);
-
+        
+        if(!this.menuTheme){
+            this.menuTheme = this.sound.add("menuBeat");
+            this.menuTheme.play(musicConfig);
+        }
+        
+        
+        
+        
+            
     }
 
 
