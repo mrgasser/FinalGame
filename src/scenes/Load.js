@@ -39,7 +39,7 @@ class Load extends Phaser.Scene{
         });
 
         // LOAD FONT
-        loadFont("mainFont", "./assets/fonts/mainFont.ttf");
+        loadFont("mainFont", "../assets/fonts/mainFont.ttf");
 
         // PLUGINS
         this.load.plugin('rexflashplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexflashplugin.min.js', true);
